@@ -1,12 +1,29 @@
 import google.generativeai as genai
 from dotenv import load_dotenv
-import os
+from openai import OpenAI
+from enum import Enum
+from dataclasses import dataclass
+from typing import List
+from prd_generator.app.config import Settings
 import json
 
 load_dotenv()
 
-genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
-system_instruction = """
+
+@dataclass
+class UserPrompt:
+    overview: str
+    stakeholders: List[str]
+    timeline: str
+
+
+class ModelType(Enum):
+    GPT4 = "gpt-4o-mini"
+    GEMINI = "gemini-1.5-flash"
+
+
+class LLMSource:  # TODO : Adjust the system instruction and user prompt
+    SYSTEM_INSTRUCTION = """ 
 You are a Product Requirements Document (PRD) generator. Your task is to create detailed, structured PRDs based on the following user inputs:
 - Project overview
 - Stakeholders list
@@ -68,30 +85,49 @@ Output:
 }
 
 """
-
-overview = "i want to make an app that focus on cooking instruction, subscription based, so every user can watch a chef cooking an indonesian food"
-stakeholders = "CEO, Project Manager, User"
-timeline = "i want to create this project from 1st november 2024 until 20th march 2025"
-
-user_prompt = f"""
+    USER_PROMPT_TEMPLATE = """
 Given the following information about a product:
 
-Overview: ${overview}
-Stakeholders: ${stakeholders} 
-Timeline: ${timeline}
+Overview: {overview}
+Stakeholders: {stakeholders} 
+Timeline: {timeline}
 
 Generate a comprehensive PRD in JSON format following this structure:
-
 "title_section": Project title and document and unique project code,
 "introduction": Background and problem definition,
 "objectives": Vision and Goals
 "timeline": Project timeline,
+    """
 
-"""
+    def __init__(self, model: ModelType):
+        self.model = model
 
-model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
-    system_instruction=system_instruction)
+    def generate_prd(self, prompt: UserPrompt):
+        formatted_prompt = self.USER_PROMPT_TEMPLATE.format(
+            overview=prompt.overview,
+            stakeholders=prompt.stakeholders,
+            timeline=prompt.timeline
+        )
+        answer = self._generate_response(formatted_prompt)
+        return answer
 
-response = model.generate_content(user_prompt)
-print(response.text)
+    def _generate_response(self, formatted_prompt: str):  # TODO : Create Structured Outputs && Gemini Logic
+        if self.model == ModelType.GPT4:
+            client = OpenAI(api_key=Settings.OPENAI_API_KEY)
+            chat_completion = client.chat.completions.create(
+                model=self.model.value,
+                messages=[
+                    {"role": "system", "content": self.SYSTEM_INSTRUCTION},
+                    {"role": "system", "content": formatted_prompt}
+                ]
+            )
+            return json.loads(chat_completion.choices[0].message.content)
+
+
+overview = "i want to make an app that focus on cooking instruction, subscription based, so every user can watch a chef cooking an indonesian food"
+stakeholders = ["CEO", "Project Manager", "User"]
+timeline = "i want to create this project from 1st november 2024 until 20th march 2025"
+
+llm = LLMSource(ModelType.GPT4)
+response = llm.generate_prd(UserPrompt(overview, stakeholders, timeline))
+print(response)
