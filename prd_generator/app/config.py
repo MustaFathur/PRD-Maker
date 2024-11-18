@@ -1,12 +1,5 @@
-import enum
-
 import dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
-class EmbeddingSource(str, enum.Enum):
-    OPENAI = "openai"
-    TRANSFORMER = "transformer"
 
 
 class _Settings(BaseSettings):
