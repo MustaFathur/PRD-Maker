@@ -5,7 +5,7 @@ import os
 from typing import List, Dict, Optional
 
 # Configure Gemini API
-GOOGLE_API_KEY = "AIzaSyDfVIMXcBhsbFugsKCUYQtDA292o8KwZ8s"
+GOOGLE_API_KEY = ""
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # Template structures
