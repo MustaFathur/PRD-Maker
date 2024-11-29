@@ -1,0 +1,165 @@
+{
+  "prd_identity": {
+    "document_version": "1.0",
+    "product_name": "Cooking Instruction App",
+    "document_owner": "Jane Doe",
+    "developer": [
+      "Development Team A"
+    ],
+    "stakeholders": [
+      "CEO",
+      "Project Manager",
+      "User"
+    ],
+    "document_stage": "Planned"
+  },
+  "overview": {
+    "description": "A subscription-based app for learning Indonesian cooking techniques.",
+    "problem_statement": "Many home cooks struggle to learn authentic Indonesian cooking techniques due to lack of accessible, interactive, and expert-guided resources.",
+    "objectives": [
+      "Provide comprehensive, step-by-step Indonesian cooking tutorials",
+      "Create an engaging and interactive learning platform for culinary enthusiasts",
+      "Bridge the gap between traditional cooking knowledge and modern learning methods"
+    ]
+  },
+  "darci": {
+    "decider": {
+      "name": "Jane Smith",
+      "responsibilities": [
+        "Final strategic decision-making",
+        "Project direction approval",
+        "Budget allocation"
+      ]
+    },
+    "accountable": {
+      "name": "Michael Johnson",
+      "responsibilities": [
+        "Overall project delivery",
+        "Quality assurance",
+        "Milestone tracking"
+      ]
+    },
+    "responsible": {
+      "team": [
+        "Alice",
+        "Bob"
+      ],
+      "responsibilities": [
+        "Technical implementation",
+        "Feature development",
+        "System architecture design"
+      ]
+    },
+    "consulted": {
+      "expert": "Chef Adi",
+      "contributions": [
+        "Culinary content validation",
+        "Cooking technique insights",
+        "Content accuracy review"
+      ]
+    },
+    "informed": {
+      "teams": [
+        "Marketing Team",
+        "Support Team"
+      ],
+      "communication_plan": [
+        "Monthly progress reports",
+        "Major milestone notifications",
+        "Quarterly review meetings"
+      ]
+    }
+  },
+  "project_timeline": {
+    "start_date": "2024-11-01",
+    "end_date": "2025-03-20",
+    "milestones": [
+      {
+        "name": "Content Strategy",
+        "start_date": "2024-11-01",
+        "end_date": "2024-12-15",
+        "key_deliverables": [
+          "Content outline",
+          "Initial recipe collection"
+        ]
+      },
+      {
+        "name": "Platform Development",
+        "start_date": "2024-12-16",
+        "end_date": "2025-02-28",
+        "key_deliverables": [
+          "App infrastructure",
+          "User interface",
+          "Initial feature set"
+        ]
+      },
+      {
+        "name": "User Testing and Refinement",
+        "start_date": "2025-03-01",
+        "end_date": "2025-03-20",
+        "key_deliverables": [
+          "User feedback collection",
+          "App improvements and optimizations",
+          "Final product release"
+        ]
+      }
+    ]
+  },
+  "success_metrics": [
+    {
+      "metric": "User Engagement",
+      "definition": "Average time spent on the app per user per week",
+      "actual": 0,
+      "target": 120
+    },
+    {
+      "metric": "Conversion Rate",
+      "definition": "Percentage of free trial users converting to paid subscriptions",
+      "actual": 0,
+      "target": 25
+    },
+    {
+      "metric": "Recipe Completion Rate",
+      "definition": "Percentage of users completing a cooking tutorial",
+      "actual": 0,
+      "target": 75
+    }
+  ],
+  "user_stories": [
+    {
+      "title": "Browse Cooking Tutorials",
+      "user_story": "As a home cook, I want to browse available cooking tutorials by cuisine type and difficulty level",
+      "acceptance_criteria": [
+        "User can filter tutorials by Indonesian region",
+        "Difficulty levels are clearly marked",
+        "Each tutorial shows estimated cooking time"
+      ],
+      "priority": "High"
+    },
+    {
+      "title": "Interactive Step-by-Step Guide",
+      "user_story": "As a user, I want to have an interactive, step-by-step cooking guide with video and text instructions",
+      "acceptance_criteria": [
+        "Each step has a video demonstration",
+        "Text instructions accompany video",
+        "Users can mark steps as completed"
+      ],
+      "priority": "Critical"
+    },
+    {
+      "title": "Community Forum Integration",
+      "user_story": "As an app user, I want to have access to a community forum where I can connect with other users, ask questions, and share cooking tips",
+      "acceptance_criteria": [
+        "Forum is easily accessible from within the app",
+        "Users can post questions and receive responses",
+        "App team monitors forum for support and content moderation"
+      ],
+      "priority": "High"
+    }
+  ],
+  "future_considerations": [
+    "Exploring partnerships with Indonesian culinary schools and chefs for content expansion",
+    "Investigating the use of AI for personalized recipe recommendations",
+    "Developing additional interactive features to enhance the learning experience, such as virtual cooking classes and skill assessments"
+  ]
+}

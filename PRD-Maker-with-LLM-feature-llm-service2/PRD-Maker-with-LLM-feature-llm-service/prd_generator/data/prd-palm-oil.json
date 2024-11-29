@@ -1,0 +1,165 @@
+{
+  "header": {
+    "document_version": "1.0",
+    "product_name": "Palm Oil Ripeness Detection",
+    "document_owner": "Alfizdiana Sholikhah",
+    "developers": [
+      "Arthur Hozanna",
+      "Fauzan Ihza Fajar",
+      "Jordan Marcelino",
+      "Rahmatullah",
+      "Ramadhan Hirmawan",
+      "Sukma Adhi Wijaya"
+    ],
+    "stakeholders": [
+      "Eric Julianto"
+    ],
+    "doc_stage": "Done",
+    "created_date": "2024-02-01"
+  },
+  "overview": {
+    "sections": [
+      {
+        "title": "Problem Statement",
+        "content": "The existing methods for assessing palm oil maturity lack efficiency and automation. Manual processes lead to inaccuracies, delays, and a lack of centralized control. Key issue:\n Inability to obtain a comprehensive palm oil maturity across different plantations.\nincreased manual effort in coordinating maturity assessments and monitoring across various locations."
+      },
+      {
+        "title": "Objective",
+        "content": "The primary objective is to create an integrated solution for palm oil maturity detection and monitoring. Specific goals include:\nDevelop a CLI for users to easily detect maturity detection on individual images.\nImplement object counting in video streams to track the number of palm and their maturity levels. Integrate ESP32 Cam into the system for on-field image capture.\nEstablish connectivity with a cloud server for centralized data processing and analysis."
+      }
+    ]
+  },
+  "darci": {
+    "roles": [
+      {
+        "name": "decider",
+        "members": [
+          "Eric Julianto"
+        ],
+        "guidelines": "Ensures the successful implementation and optimization of the Palm Oil Detection project, making critical decisions related to the integration of YOLOv8, ESP32 Cam, and cloud server functionalities. Examples include determining the model parameters for maturity classification and approving the final deployment strategy."
+      },
+      {
+        "name": "accountable",
+        "members": [
+          "Denis Setyawan"
+        ],
+        "guidelines": "Managers the overall project execution, overseeing the deployment, testing and deployment phases. Responsible for coordinating team efforts, ensuring that milestones are met, and resolving any obstacles hindering the project’s progress."
+      },
+      {
+        "name": "responsible",
+        "members": [
+          "Muhammad Acla",
+          "Rama",
+          "Ramandhika Ilham Pratama"
+        ],
+        "guidelines": "Actively engages in the hands-on tasks related to the development and implementation of the CLI, image processing, and video stream analysis. Takes ownership of the technical aspects, working closely with the development team to address challenges and ensure successful feature delivery."
+      },
+      {
+        "name": "consulted",
+        "members": [
+          "Eric Julianto",
+          "Rama"
+        ],
+        "guidelines": "Collaborates with stakeholders to gather insights and refine the user interface of the CLI. Actively seeks feedback from end-users and domain experts to enhance the overall effectiveness of the palm oil detection system."
+      },
+      {
+        "name": "informed",
+        "members": [
+          "Eric Julianto"
+        ],
+        "guidelines": "Maintains open communication challenges, and opportunities related to the project. Actively progress, challenges, and opportunities related to projects. Actively seeks and incorporates feedback from both technical and non-technical perspectives to refine and improve the solution."
+      }
+    ]
+  },
+  "project_timeline": {
+    "phases": [
+      {
+        "time_period": "8 Jan",
+        "activity": "Grooming",
+        "pic": "Product Manager"
+      },
+      {
+        "time_period": "15 Jan - 26 Jan",
+        "activity": "System Design and Architecture",
+        "pic": "Engineer"
+      },
+      {
+        "time_period": "26 Jan - 9 Feb",
+        "activity": "CLI Development and Image Processing",
+        "pic": "Engineer"
+      },
+      {
+        "time_period": "9 Feb - 12 Feb",
+        "activity": "Implement Flask",
+        "pic": "Engineer"
+      },
+      {
+        "time_period": "12 Feb - 16 Feb",
+        "activity": "Project Finishing",
+        "pic": "Engineer"
+      }
+    ]
+  },
+  "success_metrics": {
+    "metrics": [
+      {
+        "name": "Maturity Detection Accuracy",
+        "definition": "% of correctly classified palm oil maturity levels.",
+        "current": "75% Accuracy",
+        "target": "Achieve a maturity detection of 90%"
+      },
+      {
+        "name": "CLI Usability",
+        "definition": "User satisfaction with the ease of using the Command Line Interface (CLI) for image-based detection.",
+        "current": "80% user satisfaction",
+        "target": "90% user satisfaction"
+      },
+      {
+        "name": "ESP32 Cam Integration Success",
+        "definition": "Successful integration and functionality of ESP32 Cam for on-field image capture.",
+        "current": "Integration Completed",
+        "target": "Achieve a fully functional integration with ESP32 Cam."
+      },
+      {
+        "name": "Cloud Server Connectivity Reality",
+        "definition": "Reliability of the connection between the system and the cloud server.",
+        "current": "95% Reliability.",
+        "target": "Achieve 99% connectivity reliability."
+      },
+      {
+        "name": "User Feedback Incorporation",
+        "definition": "User Feedback Incorporation\n% of user feedback actively incorporated into system improvements.",
+        "current": "70% feedback integration.",
+        "target": "Achieve 90% feedback incorporate rate."
+      },
+      {
+        "name": "System Performance Enhancement",
+        "definition": "Improvement in overall system performance during image and video processing.",
+        "current": "60% improvement.",
+        "target": "Achieve 80% improvement in system performance."
+      }
+    ]
+  },
+  "user_stories": {
+    "stories": [
+      {
+        "title": "Maturity Detection Accuracy Enhancement",
+        "user_story": "As a user, I want to instantly and accurately determine the ripeness of my palm fruits using my phone or a dedicated camera, so i can optimize harvest timing and maximize yield.",
+        "acceptance_criteria": "Given i have a bunch of palm oil fruits,When i capture a photo using my smartphone app or the ESP32 Cam, Then the system analyzes the fruit characteristics (color, texture, etc.) and provides a clear prediction : Unripe, Underripe, Ripe, Overripe, Abnormal, Empty bunch.",
+        "priority": "high"
+      },
+      {
+        "title": "Capture On-Field Seamlessly with ESP32 Cam",
+        "user_story": "As a user, I want to easily collect maturity data from various locations in my plantation without manual effort, so I can monitor overall fruit development and make informed harvesting decisions.",
+        "acceptance_criteria": "Given the ESP32 Cam is setup in strategic locations, When I configure the ESP32 Cam to capture bunch images at predetermined intervals, Then the system automatically captures images and securely",
+        "priority": "high"
+      },
+      {
+        "title": "Centralized Data Management with Reliable Cloud Connectivitys",
+        "user_story": "As a user, I want to access and analyze palm oil maturity data from all plantations in one central location, so I can optimize harvesting across regions and make strategic business decisions.",
+        "acceptance_criteria": "Given the system maintains a reliable connection ( at least 98%) to the cloud server, even in areas with weak internet, When I access the user-friendly web interface.\nThen I can see data from all plantations securely stored and easily accessible.",
+        "priority": "high"
+      }
+    ]
+  }
+}

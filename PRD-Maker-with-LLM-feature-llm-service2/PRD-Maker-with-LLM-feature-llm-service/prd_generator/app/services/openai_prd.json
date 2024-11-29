@@ -1,0 +1,152 @@
+{
+  "prd_identity": {
+    "document_version": "1.0",
+    "product_name": "Cooking Instruction App",
+    "document_owner": "Jane Doe",
+    "developer": [
+      "Development Team A"
+    ],
+    "stakeholders": [
+      "CEO",
+      "Project Manager",
+      "User"
+    ],
+    "document_stage": "Planned"
+  },
+  "overview": {
+    "description": "A subscription-based app for learning Indonesian cooking techniques.",
+    "problem_statement": "Many individuals interested in Indonesian cuisine find a lack of accessible, authentic, and interactive resources to learn and perfect their cooking techniques.",
+    "objectives": [
+      "Provide a diverse range of high-quality, step-by-step Indonesian cooking tutorials.",
+      "Incorporate interactive features such as video demonstrations and user feedback.",
+      "Support users in mastering the art of Indonesian cooking through guided lessons and personalized feedback."
+    ],
+    "unique_value_proposition": "Combine expert culinary knowledge with advanced technology to create an engaging and educational cooking experience tailored for home cooks of all skill levels."
+  },
+  "darci": {
+    "decider": {
+      "name": "Jane Smith",
+      "responsibilities": [
+        "Lead product vision and strategic direction.",
+        "Make final decisions on content and feature rollout."
+      ]
+    },
+    "accountable": {
+      "name": "Michael Johnson",
+      "responsibilities": [
+        "Ensure project alignment with business goals.",
+        "Oversee comprehensive quality checks and resource management."
+      ]
+    },
+    "responsible": {
+      "team": [
+        "Alice",
+        "Bob"
+      ],
+      "responsibilities": [
+        "Develop the app's infrastructure and user interface.",
+        "Implement new features and address user feedback."
+      ]
+    },
+    "consulted": {
+      "expert": "Chef Adi",
+      "contributions": [
+        "Craft authentic cooking content and tutorials.",
+        "Provide insights on user engagement with culinary techniques."
+      ]
+    },
+    "informed": {
+      "teams": [
+        "Marketing Team",
+        "Support Team"
+      ],
+      "communication_plan": [
+        "Monthly updates on development progress.",
+        "Regular training sessions for support staff on app features."
+      ]
+    }
+  },
+  "project_timeline": {
+    "start_date": "2024-11-01",
+    "end_date": "2025-03-20",
+    "milestones": [
+      {
+        "name": "Content Development",
+        "start_date": "2024-11-01",
+        "end_date": "2024-12-15",
+        "key_deliverables": [
+          "Compendium of Indonesian recipes",
+          "Interactive tutorial scripts"
+        ]
+      },
+      {
+        "name": "Application Development",
+        "start_date": "2024-12-16",
+        "end_date": "2025-02-28",
+        "key_deliverables": [
+          "Complete app framework",
+          "Beta version for user testing",
+          "Finalized user interface design"
+        ]
+      },
+      {
+        "name": "Marketing Launch",
+        "start_date": "2025-03-01",
+        "end_date": "2025-03-20",
+        "key_deliverables": [
+          "Launch marketing campaign materials",
+          "User engagement events"
+        ]
+      }
+    ]
+  },
+  "success_metrics": [
+    {
+      "metric": "User Engagement",
+      "definition": "Average length of user sessions on the app, measuring time devoted to cooking activities.",
+      "actual": 0,
+      "target": 30
+    },
+    {
+      "metric": "Subscription Conversion Rate",
+      "definition": "Percentage of users transitioning from a free trial to paid subscriptions.",
+      "actual": 0,
+      "target": 20
+    },
+    {
+      "metric": "Tutorial Completion Rate",
+      "definition": "Percentage of users completing at least one cooking tutorial successfully.",
+      "actual": 0,
+      "target": 70
+    }
+  ],
+  "user_stories": [
+    {
+      "title": "Explore Cooking Techniques",
+      "user_story": "As a cooking enthusiast, I want to explore various Indonesian cooking techniques categorized by skill level.",
+      "acceptance_criteria": [
+        "Techniques are organized by difficulty: Beginner, Intermediate, Expert.",
+        "Each technique includes description, tools needed, and not-yet-attainable goals."
+      ],
+      "priority": "High"
+    },
+    {
+      "title": "Step-by-Step Guided Recipe",
+      "user_story": "As a user, I want a step-by-step guide with video and text instructions for each recipe so that I can follow along easily.",
+      "acceptance_criteria": [
+        "Each step includes video demonstration alongside written instructions.",
+        "Progress markers to indicate completion of each cooking step."
+      ],
+      "priority": "Critical"
+    },
+    {
+      "title": "Feedback and Ratings System",
+      "user_story": "As a user, I want to provide feedback and rate tutorials based on my experience.",
+      "acceptance_criteria": [
+        "Users can leave comments, ratings, and suggestions for improvement on each tutorial.",
+        "Feedback is visible to both other users and the development team for improvements."
+      ],
+      "priority": "Medium"
+    }
+  ]
+}

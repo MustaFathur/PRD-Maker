@@ -1,0 +1,154 @@
+{
+  "header": {
+    "document_version": "1.0",
+    "product_name": "EcoTraveler",
+    "document_owner": "Denis Setyawan",
+    "developers": [
+      "Eric Julianto",
+      "Muhammad Acla",
+      "Rama",
+      "Ramandhika Ilham Pratama"
+    ],
+    "stakeholders": ["Eric Julianto"],
+    "doc_stage": "ongoing",
+    "created_date": "2024-05-16"
+  },
+  "overview": {
+    "sections": [
+      {
+        "title": "Problem Statement",
+        "content": "In today's rapidly expanding travel industry, the allure of exploring new destinations and cultures has never been more enticing. However, this growth brings significant challenges, particularly for eco-conscious travelers striving to minimize their environmental footprint and support local communities. The industry's boom often leads to environmental degradation, cultural erosion, and socio-economic imbalances in many popular destinations. As a result, travelers who wish to make responsible choices face a daunting task: the landscape of sustainable travel options is fragmented and inconsistent, making it difficult to plan trips that align with their values."
+      },
+      {
+        "title": "Objective",
+        "content": "The objective of this digital sustainable travel product is to offer travelers a convenient and accessible way to reduce their environmental impact while promoting local communities and conservation efforts. To achieve the objective, the startup could take the following approach: Research sustainable travel trends and best practices: The startup could conduct research on sustainable travel trends and best practices to identify the most effective sustainable travel options and experiences to offer.Partner with sustainable travel providers: The startup could partner with sustainable travel providers such as eco-lodges, bike-sharing programs, and green transportation options to offer sustainable travel options to its customers.Provide a carbon footprint calculator: The startup could provide customers with a carbon footprint calculator that estimates their carbon emissions from travel and offers options for offsetting their carbon footprint.Offer educational resources: The startup could provide customers with educational resources on sustainable travel practices, including tips for reducing waste while traveling and the importance of responsible tourism. Promote local communities and conservation efforts: The startup could promote local communities and conservation efforts by offering sustainable tours and activities that support local economies and environmental conservation initiatives."
+      }
+    ]
+  },
+  "darci": {
+    "roles": [
+      {
+        "name": "decider",
+        "members": ["Eric Julianto"],
+        "guidelines": "Have final approval or veto to critical decisions related to the development (e.g. whether the feature get prioritized, additional cost, additional resource, potential PR risk)."
+      },
+      {
+        "name": "accountable",
+        "members": ["Denis Setyawan"],
+        "guidelines": "Fully accountable to deliver the impact of developing this feature."
+      },
+      {
+        "name": "responsible",
+        "members": [
+          "Muhammad Acla",
+          "Rama",
+          "Ramandhika Ilham Pratama"
+        ],
+        "guidelines": "Responsible to proactively do the work related to the feature development."
+      },
+      {
+        "name": "consulted",
+        "members": ["Eric Julianto", "Rama"],
+        "guidelines": "Need to be comfortable and aligned with the feature development, and asked for input/feedback. Decider & Accountable need to ensure those in consulted are involved."
+      },
+      {
+        "name": "informed",
+        "members": ["Eric Julianto"],
+        "guidelines": "FYI role."
+      }
+    ]
+  },
+  "project_timeline": {
+    "phases": [
+      {
+        "time_period": "14 - 24 May 2024",
+        "activity": "Create PRD and lo-fi design.",
+        "pic": "Product Manager"
+      },
+      {
+        "time_period": "4 - 27 June 2024",
+        "activity": "Development",
+        "pic": "Engineer"
+      },
+      {
+        "time_period": "28 June 2024",
+        "activity": "Deployment",
+        "pic": "Engineer"
+      }
+    ]
+  },
+  "success_metrics": {
+    "metrics": [
+      {
+        "name": "User Acquisition",
+        "definition": "Number of new users who sign up for the app and website each month.",
+        "current": "0",
+        "target": "50/month"
+      },
+      {
+        "name": "Customer Satisfaction",
+        "definition": "Average rating out of 5 given by users for their overall experience with the app and website.",
+        "current": "0",
+        "target": "4.5/5"
+      },
+      {
+        "name": "App Performance",
+        "definition": "Average load time of the app (measured in seconds)",
+        "current": "0",
+        "target": "< 5 seconds"
+      },
+      {
+        "name": "Server Uptime",
+        "definition": "Percentage of time the app are operational and accesible",
+        "current": "0",
+        "target": "90%"
+      }
+    ]
+  },
+  "user_stories": {
+    "stories": [
+      {
+        "title": "User Registration",
+        "user_story": "As a new user, I want to register an account so that I can access personalized travel recommendations.",
+        "acceptance_criteria": "Given the user is on the registration page, when the user enters a valid email and password and clicks 'register', then the system sends a confirmation email and the user can log in after verifying their email.",
+        "priority": "high"
+      },
+      {
+        "title": "User Login",
+        "user_story": "As a registered user, I want to log into my account so that I can access my saved preferences and bookings.",
+        "acceptance_criteria": "Given the user is on the login page,when the user enters their email and password and clicks 'Log In', Then the system grants access to the user's dashboard",
+        "priority": "high"
+      },
+      {
+        "title": "Search Eco-friendly Accommodations",
+        "user_story": "As a traveler, i want to search for eco-friendly accomodations so that i can choose sustainable lodging options.",
+        "acceptance_criteria": "Given the user is on the search page, when the user enters location, dates, and selects sustainability High filters, then the system displays a list nof eco-friendly accommodations with relevant certifications",
+        "priority": "high"
+      },
+      {
+        "title": "Book Sustainable Transportation e-Car",
+        "user_story": "As a user, I want to book sustainable transportation for e-car to minimize my carbon footprint during travel.",
+        "acceptance_criteria": "Given the user is on the transportation booking page, when the user selects a transportation type and chose e-car, then the system confirms the booking and sends a confirmation email and notification.",
+        "priority": "high"
+      },
+      {
+        "title": "User Profile Management",
+        "user_story": "As a user, I want to manage my profile so that I can update my personal information and preferences.",
+        "acceptance_criteria": "Given the user is on the profile management page, when the user updates their information and clicks 'Save',then the system saves the changes and updates the profile immediately.",
+        "priority": "medium"
+      },
+      {
+        "title": "Transport Destination",
+        "user_story": "As a user, I want to chose or search my destination so that the driver knows where my location is",
+        "acceptance_criteria": "Given the user has entered a pickup location, When the user enters a destination, Then the system validates the destination and calculates the route and estimated time of arrival.",
+        "priority": "high"
+      },
+      {
+        "title": "Payment Method",
+        "user_story": "As a user, I want to chose my payment method to pay for my bookings.",
+        "acceptance_criteria": "Given the user is on the payment method page, When the user chose one of payment method, Then the system processes the payment securely and confirms the transaction.",
+        "priority": "high"
+      }
+    ]
+  }
+}
