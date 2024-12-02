@@ -71,8 +71,5 @@ Cloud\ Computing/backend/sample-firebase-ai-app-43026-firebase-adminsdk-a79xd-05
 Thumbs.db
 ehthumbs.db
 
-# Ignore styles output
-Cloud\ Computing/frontend/src/styles/output.css
-
 # Ignore .env files in the backend directory
 Cloud\ Computing/backend/.env
