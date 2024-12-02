@@ -1,18 +1,20 @@
-# Use the required Node version
+# Gunakan image Node.js yang sesuai
 FROM node:22
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the necessary files
+# Copy package.json dan package-lock.json
 COPY package*.json ./
-COPY . .
 
 # Install dependencies
 RUN npm install
 
-# Expose the port that Cloud Run expects
+# Copy seluruh kode aplikasi
+COPY . .
+
+# Expose port yang digunakan oleh aplikasi
 EXPOSE 8080
 
-# Run the application
+# Jalankan aplikasi
 CMD ["npm", "start"]
