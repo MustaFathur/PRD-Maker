@@ -14,8 +14,5 @@ RUN npm install
 # Expose the port that Cloud Run expects
 EXPOSE 8080
 
-# Set the environment variable for the port
-ENV PORT 8080
-
 # Run the application
 CMD ["npm", "start"]
