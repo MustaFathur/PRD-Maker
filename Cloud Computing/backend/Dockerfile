@@ -1,20 +1,21 @@
-# Use the official Node.js image.
+# Gunakan Node versi yang dibutuhkan
 FROM node:22
 
-# Create and change to the app directory.
-WORKDIR /usr/src/app
+# Atur direktori kerja
+WORKDIR /app
 
-# Copy application dependency manifests to the container image.
+# # Buat direktori untuk credentials
+# RUN mkdir -p /app/config
+
+# Salin file yang dibutuhkan
 COPY package*.json ./
-
-# Install production dependencies.
-RUN npm install
-
-# Copy local code to the container image.
 COPY . .
 
-# Run the web service on container startup.
-CMD [ "npm", "start" ]
+# Instal dependencies
+RUN npm install
 
-# Document that the service listens on port 5000.
+# Ekspos port yang akan digunakan
 EXPOSE 5000
+
+# Jalankan aplikasi
+CMD ["npm", "start"]
