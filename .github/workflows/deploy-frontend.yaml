@@ -24,6 +24,11 @@ jobs:
           cd Cloud_Computing/frontend
           npm install
 
+      - name: Generate CSS
+        run: |
+          cd Cloud_Computing/frontend
+          npm run tailwind
+
       - name: Build Project
         run: |
           cd Cloud_Computing/frontend
