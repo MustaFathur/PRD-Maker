@@ -1,0 +1,37 @@
+name: Deploy Frontend to Google App Engine
+
+on:
+  push:
+    paths:
+      - "Cloud_Computing/frontend/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Dependencies
+        run: |
+          cd Cloud_Computing/frontend
+          npm install
+
+      - name: Build Project
+        run: |
+          cd Cloud_Computing/frontend
+          npm run build
+
+      - name: Deploy to Google App Engine
+        uses: google-github-actions/deploy-appengine@v1
+        with:
+          credentials: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          deliverables: 'Cloud_Computing/frontend/build/**'
