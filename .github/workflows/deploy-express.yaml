@@ -1,4 +1,4 @@
-name: Deploy to Cloud Run
+name: Deploy Express to Cloud Run
 
 on:
   push:
