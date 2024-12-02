@@ -1,41 +1,47 @@
-name: CI/CD Pipeline
+name: Deploy to Cloud Run
 
 on:
   push:
     paths:
       - "Cloud_Computing/backend/**"
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
-      id-token: write
+      contents: "read"
+      id-token: "write"
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.2.0
+      - name: Google Auth
+        uses: "google-github-actions/auth@v1"
         with:
-          version: 'latest'
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
+
+      - name: Set up Cloud SDK
+        uses: "google-github-actions/setup-gcloud@v1"
+        with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Configure Docker
+      - name: Authenticate Docker with GCP
         run: gcloud auth configure-docker
-      - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA -f Cloud\ Computing/backend/Dockerfile .
-      - name: Push Docker image
-        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA
+
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend"
+          cd Cloud_Computing/backend
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy express-backend \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA \
-            --platform managed \
-            --region us-central1 \
+            --image=gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend \
+            --region=${{ secrets.GCP_REGION }} \
+            --platform=managed \
             --allow-unauthenticated \
-            --set-env-vars DB_DEV_USERNAME=${{ secrets.DB_DEV_USERNAME }},DB_DEV_PASSWORD=${{ secrets.DB_DEV_PASSWORD }},DB_DEV_NAME=${{ secrets.DB_DEV_NAME }},DB_DEV_HOST=${{ secrets.DB_DEV_HOST }},DB_DEV_CONNECTION=${{ secrets.DB_DEV_CONNECTION }},NODE_ENV=${{ secrets.NODE_ENV }},JWT_SECRET=${{ secrets.JWT_SECRET }},JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }},GCLOUD_PROJECT_ID=${{ secrets.GCLOUD_PROJECT_ID }},GCLOUD_KEY_FILE=${{ secrets.GCLOUD_KEY_FILE }},GCLOUD_BUCKET_NAME=${{ secrets.GCLOUD_BUCKET_NAME }},PORT=${{ secrets.PORT }},EXPRESS_SESSION_SECRET=${{ secrets.EXPRESS_SESSION_SECRET }},GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }},GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            --set-env-vars GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }},GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }},REDIRECT_URI=${{ secrets.REDIRECT_URI }},GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }},BUCKET_NAME=${{ secrets.BUCKET_NAME }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_DATABASE=${{ secrets.DB_DATABASE }},DB_HOST=${{ secrets.DB_HOST }},DB_DIALECT=${{ secrets.DB_DIALECT }}
