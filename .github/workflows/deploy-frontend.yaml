@@ -34,9 +34,16 @@ jobs:
           cd Cloud_Computing/frontend
           npm run build
 
-      - name: Deploy to Google App Engine
-        uses: google-github-actions/deploy-appengine@v1
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          credentials: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          deliverables: 'Cloud_Computing/frontend/build/**'
+
+      - name: Deploy to Google App Engine
+        run: |
+          gcloud app deploy Cloud_Computing/frontend/app.yaml --quiet
