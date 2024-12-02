@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Requirements Document</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 2.5em;
+      border-bottom: 2px solid #2c3e50;
+      padding-bottom: 10px;
+    }
+    h2 {
+      border-bottom: 2px solid #2c3e50;
+      padding-bottom: 5px;
+      margin-top: 30px;
+      font-size: 1.8em;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .item {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    .item strong {
+      display: inline-block;
+      width: 200px;
+      font-weight: bold;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      table-layout: fixed;
+    }
+    .table th, .table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+      font-size: 1em;
+      word-wrap: break-word;
+    }
+    .table th {
+      background-color: #2c3e50;
+      color: #fff;
+      font-weight: bold;
+    }
+    .table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Product Requirements Document</h1>
+    <div class="section">
+      <h2>PRD Identity</h2>
+      <div class="item"><strong>Document Version:</strong> {{document_version}}</div>
+      <div class="item"><strong>Product Name:</strong> {{product_name}}</div>
+      <div class="item"><strong>Overview:</strong> {{overview}}</div>
+      <div class="item"><strong>Created Date:</strong> {{formatDate created_date}}</div>
+      <div class="item"><strong>Document Owner:</strong> {{document_owner}}</div>
+      <div class="item"><strong>Developer:</strong> {{developer}}</div>
+      <div class="item"><strong>Stakeholder:</strong> {{stakeholder}}</div>
+    </div>
+    <div class="section">
+      <h2>DARCI Roles</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Person Name</th>
+            <th>Guidelines</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each darciRoles}}
+            <tr>
+              <td>{{role}}</td>
+              <td>{{person_name}}</td>
+              <td>{{guidelines}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="section">
+      <h2>Timeline</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>PIC</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each timelines}}
+            <tr>
+              <td>{{activity}}</td>
+              <td>{{formatDate start_date}}</td>
+              <td>{{formatDate end_date}}</td>
+              <td>{{pic_name}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="section">
+      <h2>Success Metrics</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Metric Name</th>
+            <th>Definition</th>
+            <th>Actual Value</th>
+            <th>Target Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each successMetrics}}
+            <tr>
+              <td>{{metric_name}}</td>
+              <td>{{definition}}</td>
+              <td>{{actual_value}}</td>
+              <td>{{target_value}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="section">
+      <h2>User Stories</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>User Story</th>
+            <th>Acceptance Criteria</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each userStories}}
+            <tr>
+              <td>{{title}}</td>
+              <td>{{user_story}}</td>
+              <td>{{acceptance_criteria}}</td>
+              <td>{{priority}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="section">
+      <h2>UI/UX</h2>
+      <div class="item"><strong>Link:</strong> <a href="{{uiUx.[0].link}}" target="_blank">{{uiUx.[0].link}}</a></div>
+    </div>
+    <div class="section">
+      <h2>References</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each references}}
+            <tr>
+              <td><a href="{{reference_link}}" target="_blank">{{reference_link}}</a></td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="footer">
+      <p>Generated by PRD Maker with LLM</p>
+    </div>
+  </div>
+  <script>
+    Handlebars.registerHelper('formatDate', function(date) {
+      if (!date) return 'N/A';
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(date).toLocaleDateString(undefined, options);
+    });
+  </script>
+</body>
+</html>
