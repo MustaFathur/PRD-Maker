@@ -64,6 +64,14 @@ We are a team of Bangkit 2024 Cohorts from different learning paths and universi
    # For backend (Express)
    cd Cloud_Computing/backend
    npm install
+   
+   # Configure the database
+   cp .env.example .env
+   # Update the .env file with your database credentials
+
+   # Run migrations
+   npx sequelize-cli db:migrate
+
    npm run dev
 
    # For LLM (Flask)

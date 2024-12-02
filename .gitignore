@@ -60,6 +60,7 @@ instance/
 
 # Google Cloud
 servicekey.json
+
 # Specific JSON files for Google Cloud
 Cloud\ Computing/backend/sample-firebase-ai-app-43026-firebase-adminsdk-a79xd-0579cfa7bd.json
 
@@ -73,6 +74,5 @@ ehthumbs.db
 # Ignore styles output
 Cloud\ Computing/frontend/src/styles/output.css
 
-*.env
-Cloud\ Computing/backend/sample-firebase-ai-app-43026-firebase-adminsdk-a79xd-0579cfa7bd.json
-Cloud\ Computing/backend/*.env
+# Ignore .env files in the backend directory
+Cloud\ Computing/backend/.env
