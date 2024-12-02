@@ -2,16 +2,20 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - "Cloud_Computing/backend/**"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
@@ -22,10 +26,8 @@ jobs:
 
       - name: Configure Docker
         run: gcloud auth configure-docker
-
       - name: Build Docker image
-        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA .
-
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA -f Cloud\ Computing/backend/Dockerfile .
       - name: Push Docker image
         run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA
 
