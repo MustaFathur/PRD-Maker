@@ -43,6 +43,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/prd", prdRoutes);
 app.use("/api/personil", personilRoutes);
 
+// Route untuk root URL
+app.get('/', (req, res) => {
+  res.send('Welcome to the PRD Maker with LLM API');
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
