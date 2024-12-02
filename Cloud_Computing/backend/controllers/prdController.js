@@ -40,7 +40,7 @@ const getPRDById = async (req, res) => {
   try {
     const prd = await PRD.findByPk(req.params.id, {
       include: [
-        { model: DARCI, as: 'darciRoles' },
+        { model: DARCI, as: 'darci_roles' },
         { model: Personil, as: 'personils' },
         { model: Timeline, as: 'timelines' },
         { model: Success_Metrics, as: 'successMetrics' },
@@ -61,27 +61,38 @@ const getPRDById = async (req, res) => {
 
 const createPRD = async (req, res) => {
   try {
-    const { document_version, product_name, documentOwner, developer, stakeholder, projectOverview, darciRoles, startDate, endDate } = req.body;
+    const { document_version, product_name, document_owner, developer, stakeholder, project_overview, darci_roles, startDate, endDate } = req.body;
 
     // Ensure req.user is defined
     if (!req.user) {
       throw new Error('User not authenticated');
     }
 
+    // Validate input data
+    if (!darci_roles || typeof darci_roles !== 'object') {
+      console.error('Invalid darci_roles data:', darci_roles);
+      throw new Error('Invalid darci_roles data');
+    }
+
+    const { decider = [], accountable = [], responsible = [], consulted = [], informed = [] } = darci_roles;
+
     // Fetch personil names based on IDs
     const getPersonilNames = async (ids) => {
-      const personil = await Personil.findAll({ where: { personil_id: ids } });
+      if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return [];
+      }
+      const personil = await Personil.findAll({ where: { personil_id: ids.filter(id => id !== undefined) } });
       return personil.map(p => p.personil_name);
     };
 
-    const documentOwnerNames = await getPersonilNames(documentOwner);
+    const documentOwnerNames = await getPersonilNames(document_owner);
     const developerNames = await getPersonilNames(developer);
     const stakeholderNames = await getPersonilNames(stakeholder);
-    const deciderNames = await getPersonilNames(darciRoles.decider);
-    const accountableNames = await getPersonilNames(darciRoles.accountable);
-    const responsibleNames = await getPersonilNames(darciRoles.responsible);
-    const consultedNames = await getPersonilNames(darciRoles.consulted);
-    const informedNames = await getPersonilNames(darciRoles.informed);
+    const deciderNames = await getPersonilNames(decider);
+    const accountableNames = await getPersonilNames(accountable);
+    const responsibleNames = await getPersonilNames(responsible);
+    const consultedNames = await getPersonilNames(consulted);
+    const informedNames = await getPersonilNames(informed);
 
     // Prepare data to send to Flask API
     const prdData = {
@@ -89,8 +100,8 @@ const createPRD = async (req, res) => {
       document_owner: documentOwnerNames,
       developer: developerNames,
       stakeholder: stakeholderNames,
-      projectOverview,
-      darciRoles: {
+      project_overview,
+      darci_roles: {
         decider: deciderNames,
         accountable: accountableNames,
         responsible: responsibleNames,
@@ -121,17 +132,17 @@ const createPRD = async (req, res) => {
 
     // Store related data (team roles, timeline, success metrics, user stories, UI/UX, references)
     await Promise.all([
-      ...generatedPRD.team_roles.decider.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'decider', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.team_roles.accountable.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'accountable', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.team_roles.responsible.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'responsible', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.team_roles.consulted.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'consulted', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.team_roles.informed.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'informed', person_id: role.person_id, guidelines: role.guidelines })),
+      ...generatedPRD.darci_roles.decider.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'decider', person_id: role.person_id, guidelines: role.guidelines })),
+      ...generatedPRD.darci_roles.accountable.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'accountable', person_id: role.person_id, guidelines: role.guidelines })),
+      ...generatedPRD.darci_roles.responsible.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'responsible', person_id: role.person_id, guidelines: role.guidelines })),
+      ...generatedPRD.darci_roles.consulted.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'consulted', person_id: role.person_id, guidelines: role.guidelines })),
+      ...generatedPRD.darci_roles.informed.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'informed', person_id: role.person_id, guidelines: role.guidelines })),
       ...generatedPRD.project_timeline.milestones.map(milestone => Timeline.create({ prd_id: newPRD.prd_id, start_date: milestone.start_date, end_date: milestone.end_date, activity: milestone.activity, pic_id: milestone.pic_id })),
       ...generatedPRD.success_metrics.map(metric => Success_Metrics.create({ prd_id: newPRD.prd_id, metric_name: metric.metric_name, definition: metric.definition, actual_value: metric.actual_value, target_value: metric.target_value })),
       ...generatedPRD.user_stories.map(story => User_Stories.create({ prd_id: newPRD.prd_id, title: story.title, user_story: story.user_story, acceptance_criteria: story.acceptance_criteria, priority: story.priority })),
       UI_UX.create({ prd_id: newPRD.prd_id, link: generatedPRD.ui_ux.link }),
       ...generatedPRD.references.map(ref => References.create({ prd_id: newPRD.prd_id, reference_link: ref.reference_link })),
-      ...documentOwner.map(personil_id => PRD_Personil.create({ prd_id: newPRD.prd_id, personil_id, role: 'documentOwner' })),
+      ...document_owner.map(personil_id => PRD_Personil.create({ prd_id: newPRD.prd_id, personil_id, role: 'documentOwner' })),
       ...developer.map(personil_id => PRD_Personil.create({ prd_id: newPRD.prd_id, personil_id, role: 'developer' })),
       ...stakeholder.map(personil_id => PRD_Personil.create({ prd_id: newPRD.prd_id, personil_id, role: 'stakeholder' }))
     ]);
@@ -156,7 +167,6 @@ const createPRD = async (req, res) => {
   }
 };
 
-
 const selectSource = async (req, res) => {
   try {
     const prd = await PRD.findByPk(req.params.id);
@@ -178,33 +188,51 @@ const updatePRD = async (req, res) => {
       return res.status(404).json({ message: 'PRD not found' });
     }
 
-    const { document_version, product_name, documentOwner, developer, stakeholder, projectOverview, darciRoles, startDate, endDate } = req.body;
+    const { document_version, product_name, document_owner, developer, stakeholder, project_overview, darci_roles, startDate, endDate } = req.body;
 
-    // Ensure projectOverview is a string
-    const overview = typeof projectOverview === 'object' ? projectOverview.overview : projectOverview;
+    // Ensure darci_roles is defined and valid
+    if (!darci_roles || typeof darci_roles !== 'object') {
+      console.error('Invalid darci_roles data:', darci_roles);
+      throw new Error('Invalid darci_roles data');
+    }
+
+    const { decider = [], accountable = [], responsible = [], consulted = [], informed = [] } = darci_roles;
+
+    // Fetch personil names based on IDs
+    const getPersonilNames = async (ids) => {
+      if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return [];
+      }
+      const personil = await Personil.findAll({ where: { personil_id: ids.filter(id => id !== undefined) } });
+      return personil.map(p => p.personil_name);
+    };
+
+    const documentOwnerNames = await getPersonilNames(document_owner);
+    const developerNames = await getPersonilNames(developer);
+    const stakeholderNames = await getPersonilNames(stakeholder);
 
     // Update PRD data
     await prd.update({
       document_version,
       product_name,
-      overview,
+      overview: project_overview.overview,
       start_date: startDate,
       end_date: endDate
     });
 
     // Update related data (team roles, timeline, success metrics, user stories, UI/UX, references)
     await Promise.all([
-      ...darciRoles.decider.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'decider', person_id: role.person_id, guidelines: role.guidelines })),
-      ...darciRoles.accountable.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'accountable', person_id: role.person_id, guidelines: role.guidelines })),
-      ...darciRoles.responsible.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'responsible', person_id: role.person_id, guidelines: role.guidelines })),
-      ...darciRoles.consulted.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'consulted', person_id: role.person_id, guidelines: role.guidelines })),
-      ...darciRoles.informed.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'informed', person_id: role.person_id, guidelines: role.guidelines })),
-      ...projectOverview.milestones.map(milestone => Timeline.upsert({ prd_id: prd.prd_id, start_date: milestone.start_date, end_date: milestone.end_date, activity: milestone.activity, pic_id: milestone.pic_id })),
-      ...projectOverview.success_metrics.map(metric => Success_Metrics.upsert({ prd_id: prd.prd_id, metric_name: metric.metric_name, definition: metric.definition, actual_value: metric.actual_value, target_value: metric.target_value })),
-      ...projectOverview.user_stories.map(story => User_Stories.upsert({ prd_id: prd.prd_id, title: story.title, user_story: story.user_story, acceptance_criteria: story.acceptance_criteria, priority: story.priority })),
-      UI_UX.upsert({ prd_id: prd.prd_id, link: projectOverview.ui_ux.link }),
-      ...projectOverview.references.map(ref => References.upsert({ prd_id: prd.prd_id, reference_link: ref.reference_link })),
-      ...documentOwner.map(personil_id => PRD_Personil.upsert({ prd_id: prd.prd_id, personil_id, role: 'documentOwner' })),
+      ...decider.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'decider', person_id: role.person_id, guidelines: role.guidelines })),
+      ...accountable.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'accountable', person_id: role.person_id, guidelines: role.guidelines })),
+      ...responsible.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'responsible', person_id: role.person_id, guidelines: role.guidelines })),
+      ...consulted.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'consulted', person_id: role.person_id, guidelines: role.guidelines })),
+      ...informed.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'informed', person_id: role.person_id, guidelines: role.guidelines })),
+      ...project_overview.milestones.map(milestone => Timeline.upsert({ prd_id: prd.prd_id, start_date: milestone.start_date, end_date: milestone.end_date, activity: milestone.activity, pic_id: milestone.pic_id })),
+      ...project_overview.success_metrics.map(metric => Success_Metrics.upsert({ prd_id: prd.prd_id, metric_name: metric.metric_name, definition: metric.definition, actual_value: metric.actual_value, target_value: metric.target_value })),
+      ...project_overview.user_stories.map(story => User_Stories.upsert({ prd_id: prd.prd_id, title: story.title, user_story: story.user_story, acceptance_criteria: story.acceptance_criteria, priority: story.priority })),
+      UI_UX.upsert({ prd_id: prd.prd_id, link: project_overview.ui_ux.link }),
+      ...project_overview.references.map(ref => References.upsert({ prd_id: prd.prd_id, reference_link: ref.reference_link })),
+      ...document_owner.map(personil_id => PRD_Personil.upsert({ prd_id: prd.prd_id, personil_id, role: 'documentOwner' })),
       ...developer.map(personil_id => PRD_Personil.upsert({ prd_id: prd.prd_id, personil_id, role: 'developer' })),
       ...stakeholder.map(personil_id => PRD_Personil.upsert({ prd_id: prd.prd_id, personil_id, role: 'stakeholder' }))
     ]);
@@ -248,7 +276,7 @@ const downloadPRD = async (req, res) => {
   try {
     const prd = await PRD.findByPk(req.params.id, {
       include: [
-        { model: DARCI, as: 'darciRoles', include: [{ model: Personil }] },
+        { model: DARCI, as: 'darci_roles', include: [{ model: Personil }] },
         { model: Personil, as: 'personils' },
         { model: Timeline, as: 'timelines', include: [{ model: Personil }] },
         { model: Success_Metrics, as: 'successMetrics' },
@@ -269,7 +297,7 @@ const downloadPRD = async (req, res) => {
     prdData.created_date = prdData.created_date || 'N/A';
 
     // Map person names to DARCI roles and timelines
-    prdData.darciRoles = prdData.darciRoles.map(role => ({
+    prdData.darci_roles = prdData.darci_roles.map(role => ({
       ...role,
       person_name: role.Personil ? role.Personil.personil_name : 'N/A'
     }));

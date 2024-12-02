@@ -20,7 +20,7 @@ def generate_prd():
         "project_overview": {
             "overview": "EcoTraveler is an app designed to help eco-conscious travelers find sustainable travel options and activities. It aims to reduce carbon footprints by promoting green travel choices."
         },
-        "team_roles": {
+        "darci_roles": {
             "decider": [{"person_id": 2, "name": "Daffa", "guidelines": "Make final decisions"}],
             "accountable": [{"person_id": 3, "name": "Nabil", "guidelines": "Ensure project success"}],
             "responsible": [{"person_id": 4, "name": "Fathur", "guidelines": "Complete tasks"}],

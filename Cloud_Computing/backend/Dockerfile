@@ -1,21 +1,21 @@
-# Gunakan Node versi yang dibutuhkan
+# Use the required Node version
 FROM node:22
 
-# Atur direktori kerja
+# Set the working directory
 WORKDIR /app
 
-# # Buat direktori untuk credentials
-# RUN mkdir -p /app/config
-
-# Salin file yang dibutuhkan
+# Copy the necessary files
 COPY package*.json ./
 COPY . .
 
-# Instal dependencies
+# Install dependencies
 RUN npm install
 
-# Ekspos port yang akan digunakan
-EXPOSE 5000
+# Expose the port that Cloud Run expects
+EXPOSE 8080
 
-# Jalankan aplikasi
+# Set the environment variable for the port
+ENV PORT 8080
+
+# Run the application
 CMD ["npm", "start"]
