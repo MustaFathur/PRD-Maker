@@ -1,0 +1,39 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          version: 'latest'
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker
+
+      - name: Build Docker image
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA .
+
+      - name: Push Docker image
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy express-backend \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/express-backend:$GITHUB_SHA \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --set-env-vars DB_DEV_USERNAME=${{ secrets.DB_DEV_USERNAME }},DB_DEV_PASSWORD=${{ secrets.DB_DEV_PASSWORD }},DB_DEV_NAME=${{ secrets.DB_DEV_NAME }},DB_DEV_HOST=${{ secrets.DB_DEV_HOST }},DB_DEV_CONNECTION=${{ secrets.DB_DEV_CONNECTION }},NODE_ENV=${{ secrets.NODE_ENV }},JWT_SECRET=${{ secrets.JWT_SECRET }},JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }},GCLOUD_PROJECT_ID=${{ secrets.GCLOUD_PROJECT_ID }},GCLOUD_KEY_FILE=${{ secrets.GCLOUD_KEY_FILE }},GCLOUD_BUCKET_NAME=${{ secrets.GCLOUD_BUCKET_NAME }},PORT=${{ secrets.PORT }},EXPRESS_SESSION_SECRET=${{ secrets.EXPRESS_SESSION_SECRET }},GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }},GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}

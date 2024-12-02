@@ -1,0 +1,209 @@
+{
+    "prd_id": 2,
+    "user_id": 1,
+    "document_version": "Version 1.0",
+    "product_name": "EcoTraveler",
+    "document_stage": "draft",
+    "created_date": "2024-12-02T01:27:41.000Z",
+    "overview": "EcoTraveler is an app designed to help eco-conscious travelers find sustainable travel options and activities. It aims to reduce carbon footprints by promoting green travel choices.",
+    "source": null,
+    "createdAt": "2024-12-02T01:27:41.000Z",
+    "updatedAt": "2024-12-02T01:27:41.000Z",
+    "darciRoles": [
+        {
+            "darci_id": 6,
+            "prd_id": 2,
+            "role": "decider",
+            "person_id": 2,
+            "guidelines": "Make final decisions",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        },
+        {
+            "darci_id": 7,
+            "prd_id": 2,
+            "role": "accountable",
+            "person_id": 3,
+            "guidelines": "Ensure project success",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        },
+        {
+            "darci_id": 8,
+            "prd_id": 2,
+            "role": "responsible",
+            "person_id": 4,
+            "guidelines": "Complete tasks",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        },
+        {
+            "darci_id": 9,
+            "prd_id": 2,
+            "role": "consulted",
+            "person_id": 1,
+            "guidelines": "Provide input",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        },
+        {
+            "darci_id": 10,
+            "prd_id": 2,
+            "role": "informed",
+            "person_id": 2,
+            "guidelines": "Stay updated",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        }
+    ],
+    "personils": [
+        {
+            "personil_id": 1,
+            "personil_name": "Zio",
+            "role": "Developer",
+            "created_by": 2,
+            "createdAt": "2024-12-01T15:53:32.000Z",
+            "updatedAt": "2024-12-01T15:53:32.000Z",
+            "PRD_Personil": {
+                "id": 10,
+                "prd_id": 2,
+                "personil_id": 1,
+                "role": "stakeholder",
+                "createdAt": "2024-12-02T01:27:41.000Z",
+                "updatedAt": "2024-12-02T01:27:41.000Z"
+            }
+        },
+        {
+            "personil_id": 2,
+            "personil_name": "Daffa",
+            "role": "Developer",
+            "created_by": 2,
+            "createdAt": "2024-12-01T15:53:36.000Z",
+            "updatedAt": "2024-12-01T15:53:36.000Z",
+            "PRD_Personil": {
+                "id": 7,
+                "prd_id": 2,
+                "personil_id": 2,
+                "role": "developer",
+                "createdAt": "2024-12-02T01:27:41.000Z",
+                "updatedAt": "2024-12-02T01:27:41.000Z"
+            }
+        },
+        {
+            "personil_id": 3,
+            "personil_name": "Nabil",
+            "role": "Developer",
+            "created_by": 2,
+            "createdAt": "2024-12-01T15:53:41.000Z",
+            "updatedAt": "2024-12-01T15:53:41.000Z",
+            "PRD_Personil": {
+                "id": 9,
+                "prd_id": 2,
+                "personil_id": 3,
+                "role": "developer",
+                "createdAt": "2024-12-02T01:27:41.000Z",
+                "updatedAt": "2024-12-02T01:27:41.000Z"
+            }
+        },
+        {
+            "personil_id": 4,
+            "personil_name": "Fathur",
+            "role": "Developer",
+            "created_by": 2,
+            "createdAt": "2024-12-01T15:53:47.000Z",
+            "updatedAt": "2024-12-01T15:53:47.000Z",
+            "PRD_Personil": {
+                "id": 8,
+                "prd_id": 2,
+                "personil_id": 4,
+                "role": "stakeholder",
+                "createdAt": "2024-12-02T01:27:41.000Z",
+                "updatedAt": "2024-12-02T01:27:41.000Z"
+            }
+        }
+    ],
+    "timelines": [
+        {
+            "timeline_id": 3,
+            "prd_id": 2,
+            "start_date": "2024-04-01T00:00:00.000Z",
+            "end_date": "2024-06-30T00:00:00.000Z",
+            "activity": "Design and Prototyping",
+            "pic_id": 2,
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        },
+        {
+            "timeline_id": 4,
+            "prd_id": 2,
+            "start_date": "2024-01-01T00:00:00.000Z",
+            "end_date": "2024-03-31T00:00:00.000Z",
+            "activity": "Research and Development",
+            "pic_id": 1,
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        }
+    ],
+    "successMetrics": [
+        {
+            "metric_id": 3,
+            "prd_id": 2,
+            "metric_name": "User Acquisition",
+            "definition": "The number of new users acquired each month",
+            "actual_value": "100",
+            "target_value": "500",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        },
+        {
+            "metric_id": 4,
+            "prd_id": 2,
+            "metric_name": "Engagement Rate",
+            "definition": "The percentage of active users",
+            "actual_value": "20",
+            "target_value": "50",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        }
+    ],
+    "userStories": [
+        {
+            "story_id": 3,
+            "prd_id": 2,
+            "title": "User Registration",
+            "user_story": "As a user, I want to register for an account so that I can track my sustainable travel options.",
+            "acceptance_criteria": "The registration form should accept email, password, and basic user details.",
+            "priority": "High",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        },
+        {
+            "story_id": 4,
+            "prd_id": 2,
+            "title": "Search for Green Hotels",
+            "user_story": "As a user, I want to search for eco-friendly hotels so that I can book a sustainable place to stay.",
+            "acceptance_criteria": "The app should show a list of eco-friendly hotels based on my location and preferences.",
+            "priority": "Medium",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        }
+    ],
+    "uiUx": [
+        {
+            "uiux_id": 2,
+            "prd_id": 2,
+            "link": "https://www.example.com/ui-design",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        }
+    ],
+    "references": [
+        {
+            "reference_id": 2,
+            "prd_id": 2,
+            "reference_link": "https://www.example.com/sustainability-research",
+            "createdAt": "2024-12-02T01:27:41.000Z",
+            "updatedAt": "2024-12-02T01:27:41.000Z"
+        }
+    ]
+}

@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require('express-session');
 const passport = require('./config/passport');
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -12,6 +13,14 @@ const personilRoutes = require("./routes/personilRoutes");
 dotenv.config();
 
 const app = express();
+
+app.use(
+  session({
+    secret: process.env.EXPRESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -34,7 +43,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/prd", prdRoutes);
 app.use("/api/personil", personilRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
