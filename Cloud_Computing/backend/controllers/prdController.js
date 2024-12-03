@@ -61,38 +61,22 @@ const getPRDById = async (req, res) => {
 
 const createPRD = async (req, res) => {
   try {
-    const { document_version, product_name, document_owner, developer, stakeholder, project_overview, darci_roles, startDate, endDate } = req.body;
+    const { document_version, product_name, document_owner, developer, stakeholder, project_overview, darci_roles, start_date, end_date } = req.body;
 
-    // Ensure req.user is defined
-    if (!req.user) {
-      throw new Error('User not authenticated');
-    }
-
-    // Validate input data
-    if (!darci_roles || typeof darci_roles !== 'object') {
-      console.error('Invalid darci_roles data:', darci_roles);
-      throw new Error('Invalid darci_roles data');
-    }
-
-    const { decider = [], accountable = [], responsible = [], consulted = [], informed = [] } = darci_roles;
-
-    // Fetch personil names based on IDs
+    // Fungsi untuk mendapatkan nama personil berdasarkan ID
     const getPersonilNames = async (ids) => {
-      if (!ids || !Array.isArray(ids) || ids.length === 0) {
-        return [];
-      }
-      const personil = await Personil.findAll({ where: { personil_id: ids.filter(id => id !== undefined) } });
+      const personil = await Personil.findAll({ where: { personil_id: ids } });
       return personil.map(p => p.personil_name);
     };
 
     const documentOwnerNames = await getPersonilNames(document_owner);
     const developerNames = await getPersonilNames(developer);
     const stakeholderNames = await getPersonilNames(stakeholder);
-    const deciderNames = await getPersonilNames(decider);
-    const accountableNames = await getPersonilNames(accountable);
-    const responsibleNames = await getPersonilNames(responsible);
-    const consultedNames = await getPersonilNames(consulted);
-    const informedNames = await getPersonilNames(informed);
+    const deciderNames = await getPersonilNames(darci_roles.decider);
+    const accountableNames = await getPersonilNames(darci_roles.accountable);
+    const responsibleNames = await getPersonilNames(darci_roles.responsible);
+    const consultedNames = await getPersonilNames(darci_roles.consulted);
+    const informedNames = await getPersonilNames(darci_roles.informed);
 
     // Prepare data to send to Flask API
     const prdData = {
@@ -108,62 +92,51 @@ const createPRD = async (req, res) => {
         consulted: consultedNames,
         informed: informedNames
       },
-      startDate,
-      endDate
+      start_date,
+      end_date
     };
 
     // Send data to Flask API
-    const response = await axios.post('http://localhost:5001/api/generate-prd', prdData);
+    const response = await axios.post('http://localhost:8080/api/generate-prd', prdData);
+
+    // Log the response from Flask API
+    console.log('Response from Flask API:', response.data);
 
     // Retrieve generated PRD data from Flask API
     const generatedPRD = response.data;
+
+    // Check if generatedPRD contains the expected properties
+    if (!generatedPRD || !generatedPRD.darci || !generatedPRD.header || !generatedPRD.overview || !generatedPRD.project_timeline || !generatedPRD.success_metrics || !generatedPRD.user_stories) {
+      throw new Error('Invalid response from Flask API');
+    }
+
+    // Convert overview to string
+    const overviewString = JSON.stringify(generatedPRD.overview);
 
     // Store generated PRD data in the database
     const newPRD = await PRD.create({
       user_id: req.user.user_id,
       document_version,
-      product_name,
+      product_name: generatedPRD.header.product_name || product_name,
       document_stage: 'draft',
       created_date: new Date(),
-      overview: generatedPRD.project_overview.overview,
-      start_date: startDate,
-      end_date: endDate
+      overview: overviewString || project_overview,
+      start_date,
+      end_date
     });
 
-    // Store related data (team roles, timeline, success metrics, user stories, UI/UX, references)
+    // Store related data (team roles, timeline, success metrics, user stories)
     await Promise.all([
-      ...generatedPRD.darci_roles.decider.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'decider', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.darci_roles.accountable.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'accountable', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.darci_roles.responsible.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'responsible', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.darci_roles.consulted.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'consulted', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.darci_roles.informed.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: 'informed', person_id: role.person_id, guidelines: role.guidelines })),
-      ...generatedPRD.project_timeline.milestones.map(milestone => Timeline.create({ prd_id: newPRD.prd_id, start_date: milestone.start_date, end_date: milestone.end_date, activity: milestone.activity, pic_id: milestone.pic_id })),
-      ...generatedPRD.success_metrics.map(metric => Success_Metrics.create({ prd_id: newPRD.prd_id, metric_name: metric.metric_name, definition: metric.definition, actual_value: metric.actual_value, target_value: metric.target_value })),
-      ...generatedPRD.user_stories.map(story => User_Stories.create({ prd_id: newPRD.prd_id, title: story.title, user_story: story.user_story, acceptance_criteria: story.acceptance_criteria, priority: story.priority })),
-      UI_UX.create({ prd_id: newPRD.prd_id, link: generatedPRD.ui_ux.link }),
-      ...generatedPRD.references.map(ref => References.create({ prd_id: newPRD.prd_id, reference_link: ref.reference_link })),
-      ...document_owner.map(personil_id => PRD_Personil.create({ prd_id: newPRD.prd_id, personil_id, role: 'documentOwner' })),
-      ...developer.map(personil_id => PRD_Personil.create({ prd_id: newPRD.prd_id, personil_id, role: 'developer' })),
-      ...stakeholder.map(personil_id => PRD_Personil.create({ prd_id: newPRD.prd_id, personil_id, role: 'stakeholder' }))
+      ...generatedPRD.darci.roles.map(role => DARCI.create({ prd_id: newPRD.prd_id, role: role.role, person_id: role.person_id, guidelines: role.guidelines })),
+      ...generatedPRD.project_timeline.phases.map(timeline => Timeline.create({ prd_id: newPRD.prd_id, activity: timeline.activity, start_date: timeline.start_date, end_date: timeline.end_date })),
+      ...generatedPRD.success_metrics.metrics.map(metric => Success_Metrics.create({ prd_id: newPRD.prd_id, metric_name: metric.name, definition: metric.definition, actual_value: metric.current, target_value: metric.target })),
+      ...generatedPRD.user_stories.stories.map(story => User_Stories.create({ prd_id: newPRD.prd_id, title: story.title, user_story: story.user_story, acceptance_criteria: story.acceptance_criteria, priority: story.priority }))
     ]);
 
-    // Fetch the complete PRD with its associations
-    const completePRD = await PRD.findByPk(newPRD.prd_id, {
-      include: [
-        { model: DARCI, as: 'darciRoles' },
-        { model: Personil, as: 'personils' },
-        { model: Timeline, as: 'timelines' },
-        { model: Success_Metrics, as: 'successMetrics' },
-        { model: User_Stories, as: 'userStories' },
-        { model: UI_UX, as: 'uiUx' },
-        { model: References, as: 'references' }
-      ]
-    });
-
-    res.status(201).json(completePRD);
+    res.status(201).json(newPRD);
   } catch (error) {
     console.error('Error creating PRD:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
 
@@ -178,6 +151,59 @@ const selectSource = async (req, res) => {
   } catch (error) {
     console.error('Error selecting source:', error);
     res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const updatePRD = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { product_name, document_owner, developer, stakeholder, project_overview, darci_roles, startDate, endDate } = req.body;
+
+    // Temukan PRD yang akan diperbarui
+    const prd = await PRD.findByPk(id);
+    if (!prd) {
+      return res.status(404).json({ message: 'PRD not found' });
+    }
+
+    // Perbarui data PRD
+    prd.product_name = product_name;
+    prd.overview = project_overview;
+    prd.start_date = startDate;
+    prd.end_date = endDate;
+    await prd.save();
+
+    // Hapus data terkait yang lama
+    await Promise.all([
+      DARCI.destroy({ where: { prd_id: id } }),
+      Timeline.destroy({ where: { prd_id: id } }),
+      Success_Metrics.destroy({ where: { prd_id: id } }),
+      User_Stories.destroy({ where: { prd_id: id } }),
+      UI_UX.destroy({ where: { prd_id: id } }),
+      References.destroy({ where: { prd_id: id } }),
+      PRD_Personil.destroy({ where: { prd_id: id } })
+    ]);
+
+    // Tambahkan data terkait yang baru
+    await Promise.all([
+      ...darci_roles.decider.map(role => DARCI.create({ prd_id: id, role: 'decider', person_id: role.person_id, guidelines: role.guidelines })),
+      ...darci_roles.accountable.map(role => DARCI.create({ prd_id: id, role: 'accountable', person_id: role.person_id, guidelines: role.guidelines })),
+      ...darci_roles.responsible.map(role => DARCI.create({ prd_id: id, role: 'responsible', person_id: role.person_id, guidelines: role.guidelines })),
+      ...darci_roles.consulted.map(role => DARCI.create({ prd_id: id, role: 'consulted', person_id: role.person_id, guidelines: role.guidelines })),
+      ...darci_roles.informed.map(role => DARCI.create({ prd_id: id, role: 'informed', person_id: role.person_id, guidelines: role.guidelines })),
+      ...req.body.timelines.map(timeline => Timeline.create({ prd_id: id, ...timeline })),
+      ...req.body.success_metrics.map(metric => Success_Metrics.create({ prd_id: id, ...metric })),
+      ...req.body.user_stories.map(story => User_Stories.create({ prd_id: id, ...story })),
+      ...req.body.ui_ux.map(uiux => UI_UX.create({ prd_id: id, ...uiux })),
+      ...req.body.references.map(reference => References.create({ prd_id: id, ...reference })),
+      ...document_owner.map(personil_id => PRD_Personil.create({ prd_id: id, personil_id, role: 'documentOwner' })),
+      ...developer.map(personil_id => PRD_Personil.create({ prd_id: id, personil_id, role: 'developer' })),
+      ...stakeholder.map(personil_id => PRD_Personil.create({ prd_id: id, personil_id, role: 'stakeholder' }))
+    ]);
+
+    res.json({ message: 'PRD updated successfully' });
+  } catch (error) {
+    console.error('Error updating PRD:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
 

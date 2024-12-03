@@ -24,13 +24,23 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     role: {
-      type: DataTypes.STRING
+      type: DataTypes.ENUM('document_owner', 'developer', 'stakeholder', 'decider', 'accountable', 'responsible', 'consulted', 'informed'),
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
     modelName: 'PRD_Personil',
     tableName: 'PRD_Personil',
-    timestamps: true
+    timestamps: true,
+    underscored: true
   });
 
   return PRD_Personil;

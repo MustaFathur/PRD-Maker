@@ -1,6 +1,11 @@
-from flask import Flask, request, jsonify
+import sys
 import os
-from app.llm import PRDGenerator
+from flask import Flask, request, jsonify
+
+# Tambahkan path ke sys.path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from llm import PRDGenerator
 
 app = Flask(__name__)
 

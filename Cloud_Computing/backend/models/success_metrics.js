@@ -15,25 +15,39 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     prd_id: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
-    metric_name: {
-      type: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     definition: {
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
+      allowNull: false
     },
-    actual_value: {
-      type: DataTypes.DECIMAL
+    current: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
     },
-    target_value: {
-      type: DataTypes.DECIMAL
+    target: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
     modelName: 'Success_Metrics',
     tableName: 'Success_Metrics',
-    timestamps: true
+    timestamps: true,
+    underscored: true
   });
 
   return Success_Metrics;

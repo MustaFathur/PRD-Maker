@@ -15,16 +15,27 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     prd_id: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     link: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
     modelName: 'UI_UX',
     tableName: 'UI_UXes',
-    timestamps: true
+    timestamps: true,
+    underscored: true
   });
 
   return UI_UX;

@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'prd_id',
         as: 'prds'
       });
-      Personil.hasMany(models.DARCI, { foreignKey: 'person_id', as: 'darciRoles' });
-      Personil.hasMany(models.Timeline, { foreignKey: 'pic_id', as: 'timelines' });
+      Personil.hasMany(models.DARCI, { foreignKey: 'personil_id', as: 'darciRoles' });
+      Personil.hasMany(models.Timeline, { foreignKey: 'pic', as: 'timelines' });
     }
   }
 
@@ -27,16 +27,32 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     role: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: true
     },
     created_by: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'user_id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
     modelName: 'Personil',
     tableName: 'Personils',
-    timestamps: true
+    timestamps: true,
+    underscored: true
   });
 
   return Personil;

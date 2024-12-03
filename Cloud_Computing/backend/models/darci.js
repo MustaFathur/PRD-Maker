@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class DARCI extends Model {
     static associate(models) {
       DARCI.belongsTo(models.PRD, { foreignKey: 'prd_id' });
-      DARCI.belongsTo(models.Personil, { foreignKey: 'person_id' });
+      DARCI.belongsTo(models.Personil, { foreignKey: 'personil_id' });
     }
   }
 
@@ -16,22 +16,35 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     prd_id: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     role: {
-      type: DataTypes.STRING
+      type: DataTypes.ENUM('decider', 'accountable', 'responsible', 'consulted', 'informed'),
+      allowNull: false
     },
-    person_id: {
-      type: DataTypes.INTEGER
+    personil_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     guidelines: {
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
     modelName: 'DARCI',
     tableName: 'DARCIs',
-    timestamps: true
+    timestamps: true,
+    underscored: true
   });
 
   return DARCI;

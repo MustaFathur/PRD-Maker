@@ -15,25 +15,39 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     prd_id: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     title: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     user_story: {
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
+      allowNull: false
     },
     acceptance_criteria: {
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
+      allowNull: false
     },
     priority: {
-      type: DataTypes.STRING
+      type: DataTypes.ENUM('low', 'medium', 'high'),
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
     modelName: 'User_Stories',
     tableName: 'User_Stories',
-    timestamps: true
+    timestamps: true,
+    underscored: true
   });
 
   return User_Stories;

@@ -1,5 +1,4 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('PRDs', {
@@ -28,30 +27,37 @@ module.exports = {
         allowNull: false
       },
       document_stage: {
-        type: Sequelize.ENUM('draft', 'completed')
+        type: Sequelize.ENUM('draft', 'ongoing', 'completed'),
+        allowNull: false
+      },
+      project_overview: {
+        type: Sequelize.TEXT,
+        allowNull: false
       },
       created_date: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false
       },
-      overview: {
-        type: Sequelize.TEXT
+      start_date: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
-      source: {
-        type: Sequelize.ENUM('gemini', 'openai')
+      end_date: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },
-
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('PRDs');
   }

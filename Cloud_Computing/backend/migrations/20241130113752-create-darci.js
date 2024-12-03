@@ -1,5 +1,4 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('DARCIs', {
@@ -19,9 +18,10 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       role: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM('decider', 'accountable', 'responsible', 'consulted', 'informed'),
+        allowNull: false
       },
-      person_id: {
+      personil_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Personils',
@@ -31,14 +31,15 @@ module.exports = {
         onDelete: 'SET NULL'
       },
       guidelines: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
