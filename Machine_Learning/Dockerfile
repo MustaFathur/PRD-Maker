@@ -12,7 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose port yang digunakan oleh aplikasi
+ENV PORT=8080
 EXPOSE 8080
 
 # Jalankan aplikasi
-CMD ["python", "app.py"]
+CMD ["python", "app/main.py"]
