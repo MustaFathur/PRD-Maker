@@ -73,3 +73,4 @@ ehthumbs.db
 
 # Ignore .env files in the backend directory
 Cloud\ Computing/backend/.env
+Cloud_Computing/backend/prd-maker-with-llm-c06e2d88cbe1.json
