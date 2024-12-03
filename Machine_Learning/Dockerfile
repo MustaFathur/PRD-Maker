@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8080
 
 # Jalankan aplikasi
-CMD ["python", "app.py"]
+CMD ["python", "app/main.py"]
