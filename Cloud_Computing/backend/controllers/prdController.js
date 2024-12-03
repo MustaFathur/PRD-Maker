@@ -181,69 +181,6 @@ const selectSource = async (req, res) => {
   }
 };
 
-const updatePRD = async (req, res) => {
-  try {
-    const prd = await PRD.findByPk(req.params.id);
-    if (!prd) {
-      return res.status(404).json({ message: 'PRD not found' });
-    }
-
-    const { document_version, product_name, document_owner, developer, stakeholder, project_overview, darci_roles, startDate, endDate } = req.body;
-
-    // Ensure darci_roles is defined and valid
-    if (!darci_roles || typeof darci_roles !== 'object') {
-      console.error('Invalid darci_roles data:', darci_roles);
-      throw new Error('Invalid darci_roles data');
-    }
-
-    const { decider = [], accountable = [], responsible = [], consulted = [], informed = [] } = darci_roles;
-
-    // Fetch personil names based on IDs
-    const getPersonilNames = async (ids) => {
-      if (!ids || !Array.isArray(ids) || ids.length === 0) {
-        return [];
-      }
-      const personil = await Personil.findAll({ where: { personil_id: ids.filter(id => id !== undefined) } });
-      return personil.map(p => p.personil_name);
-    };
-
-    const documentOwnerNames = await getPersonilNames(document_owner);
-    const developerNames = await getPersonilNames(developer);
-    const stakeholderNames = await getPersonilNames(stakeholder);
-
-    // Update PRD data
-    await prd.update({
-      document_version,
-      product_name,
-      overview: project_overview.overview,
-      start_date: startDate,
-      end_date: endDate
-    });
-
-    // Update related data (team roles, timeline, success metrics, user stories, UI/UX, references)
-    await Promise.all([
-      ...decider.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'decider', person_id: role.person_id, guidelines: role.guidelines })),
-      ...accountable.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'accountable', person_id: role.person_id, guidelines: role.guidelines })),
-      ...responsible.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'responsible', person_id: role.person_id, guidelines: role.guidelines })),
-      ...consulted.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'consulted', person_id: role.person_id, guidelines: role.guidelines })),
-      ...informed.map(role => DARCI.upsert({ prd_id: prd.prd_id, role: 'informed', person_id: role.person_id, guidelines: role.guidelines })),
-      ...project_overview.milestones.map(milestone => Timeline.upsert({ prd_id: prd.prd_id, start_date: milestone.start_date, end_date: milestone.end_date, activity: milestone.activity, pic_id: milestone.pic_id })),
-      ...project_overview.success_metrics.map(metric => Success_Metrics.upsert({ prd_id: prd.prd_id, metric_name: metric.metric_name, definition: metric.definition, actual_value: metric.actual_value, target_value: metric.target_value })),
-      ...project_overview.user_stories.map(story => User_Stories.upsert({ prd_id: prd.prd_id, title: story.title, user_story: story.user_story, acceptance_criteria: story.acceptance_criteria, priority: story.priority })),
-      UI_UX.upsert({ prd_id: prd.prd_id, link: project_overview.ui_ux.link }),
-      ...project_overview.references.map(ref => References.upsert({ prd_id: prd.prd_id, reference_link: ref.reference_link })),
-      ...document_owner.map(personil_id => PRD_Personil.upsert({ prd_id: prd.prd_id, personil_id, role: 'documentOwner' })),
-      ...developer.map(personil_id => PRD_Personil.upsert({ prd_id: prd.prd_id, personil_id, role: 'developer' })),
-      ...stakeholder.map(personil_id => PRD_Personil.upsert({ prd_id: prd.prd_id, personil_id, role: 'stakeholder' }))
-    ]);
-
-    res.json(prd);
-  } catch (error) {
-    console.error('Error updating PRD:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
-
 const deletePRD = async (req, res) => {
   try {
     const prd = await PRD.findByPk(req.params.id);
