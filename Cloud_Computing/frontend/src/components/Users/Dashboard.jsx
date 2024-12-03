@@ -46,18 +46,18 @@ const Dashboard = () => {
           <div className="max-w-4xl w-full">
             <h1 className="text-3xl font-bold mb-4 text-center">Dashboard</h1>
             <h2 className="text-xl font-bold text-center mb-8">Welcome, {dashboardData.user.name} 😊</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="bg-white shadow-lg rounded-lg p-4 text-center">
-                <h2 className="text-xl font-bold">Personil Total</h2>
-                <p className="text-lg">{dashboardData.personilTotal}</p>
+            <div className="flex justify-center stats stats-vertical lg:stats-horizontal shadow">
+              <div className="stat">
+                <h2 className="stat-title">Personil Total</h2>
+                <p className="stat-value">{dashboardData.personilTotal}</p>
               </div>
-              <div className="bg-white shadow-lg rounded-lg p-4 text-center">
-                <h2 className="text-xl font-bold">PRD Made in Draft</h2>
-                <p className="text-lg">{dashboardData.prdDraftTotal}</p>
+              <div className="stat">
+                <h2 className="stat-title">PRD Made in Draft</h2>
+                <p className="stat-value">{dashboardData.prdDraftTotal}</p>
               </div>
-              <div className="bg-white shadow-lg rounded-lg p-4 text-center">
-                <h2 className="text-xl font-bold">PRD Total</h2>
-                <p className="text-lg">{dashboardData.prdTotal}</p>
+              <div className="stat">
+                <h2 className="stat-title">PRD Total</h2>
+                <p className="stat-value">{dashboardData.prdTotal}</p>
               </div>
             </div>
           </div>

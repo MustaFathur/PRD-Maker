@@ -34,11 +34,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('low', 'medium', 'high'),
       allowNull: false
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     }
@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User_Stories',
     tableName: 'User_Stories',
     timestamps: true,
-    underscored: true
+    underscored: false
   });
 
   return User_Stories;

@@ -10,6 +10,7 @@ import PRDList from './components/Users/PRDList';
 import PRDDetail from './components/Users/PRDDetail'; // Import PRDDetail component
 import PrivateRoute from './components/Logic/PrivateRoute';
 import PublicRoute from './components/Logic/PublicRoute';
+import PRDEdit from './components/Users/PRDEdit';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/create-prd" element={<PrivateRoute><PRDForm /></PrivateRoute>} />
           <Route path="/prd-list" element={<PrivateRoute><PRDList /></PrivateRoute>} />
           <Route path="/prd/:id" element={<PrivateRoute><PRDDetail /></PrivateRoute>} /> {/* Add PRDDetail route */}
+          <Route path="/prd/:id/edit" element={<PrivateRoute><PRDEdit /></PrivateRoute>} /> {/* Add PRDDetail route */}
           <Route path="/personil" element={<PrivateRoute><Personil /></PrivateRoute>} />
         </Routes>
       </div>

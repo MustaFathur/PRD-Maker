@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../Layout/Sidebar';
 import Navbar from '../Layout/Navbar';
+import api from '../../utils/api';
 
 const PRDList = () => {
   const [prdList, setPrdList] = useState([]);
@@ -34,6 +35,22 @@ const PRDList = () => {
     fetchPRDList();
   }, [filter]);
 
+  const handleDownload = async (id) => {
+    try {
+      const response = await api.get(`/prd/download/${id}`, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `PRD_${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading PRD:', error);
+      setError(error.message);
+    }
+  };
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -54,7 +71,8 @@ const PRDList = () => {
               >
                 <option value="all">All</option>
                 <option value="draft">Draft</option>
-                <option value="complete">Complete</option>
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
               </select>
             </div>
           </div>
@@ -67,7 +85,10 @@ const PRDList = () => {
                   <p className="text-gray-700 mb-1"><strong>Owner:</strong> {prd.document_owner}</p>
                   <p className="text-gray-700 mb-1"><strong>Stage:</strong> {prd.document_stage}</p>
                 </div>
-                <Link to={`/prd/${prd.prd_id}`} className="btn btn-primary mt-4 self-end">View PRD</Link>
+                <div className="flex justify-between mt-4">
+                  <Link to={`/prd/${prd.prd_id}`} className="btn btn-primary">View PRD</Link>
+                  <button className="btn btn-secondary" onClick={() => handleDownload(prd.prd_id)}>Download PRD</button>
+                </div>
               </div>
             ))}
           </div>

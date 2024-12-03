@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../Layout/Sidebar';
 import Navbar from '../Layout/Navbar';
 import PRDDisplay from './PRDDisplay';
+import api from '../../utils/api';
 
 const PRDForm = () => {
   const [productName, setProductName] = useState('');
@@ -37,20 +38,8 @@ const PRDForm = () => {
   useEffect(() => {
     const fetchPersonil = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/personil', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies in the request
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch personil data');
-        }
-
-        const data = await response.json();
-        setPersonil(data);
+        const response = await api.get('/personil');
+        setPersonil(response.data);
       } catch (error) {
         console.error('Error fetching personil data:', error);
         setError(error.message);
@@ -76,43 +65,20 @@ const PRDForm = () => {
     setError(null);
 
     const prdData = {
-      productName,
-      documentVersion,
-      documentOwner,
-      developer,
-      stakeholder,
-      projectOverview,
-      darciRoles,
-      startDate,
-      endDate
+      document_version: documentVersion,
+      product_name: productName,
+      document_owner: documentOwner,
+      developer: developer,
+      stakeholder: stakeholder,
+      project_overview: projectOverview,
+      darci_roles: darciRoles,
+      start_date: startDate,
+      end_date: endDate
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/prd/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(prdData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate PRD");
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let result = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        result += decoder.decode(value);
-      }
-
-      const parsedResult = JSON.parse(result);
-      setGeneratedPRD(parsedResult.prd);
-
+      const response = await api.post('/prd', prdData);
+      setGeneratedPRD(response.data);
     } catch (error) {
       console.error("Error generating PRD:", error);
       setError(error.message);

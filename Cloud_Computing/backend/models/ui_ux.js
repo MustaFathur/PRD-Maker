@@ -22,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     }
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'UI_UX',
     tableName: 'UI_UXes',
     timestamps: true,
-    underscored: true
+    underscored: false
   });
 
   return UI_UX;

@@ -1,8 +1,9 @@
 'use strict';
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('PRD_Personil', {
-      id: {
+    await queryInterface.createTable('DARCIs', {
+      darci_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -17,6 +18,10 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
+      role: {
+        type: Sequelize.ENUM('decider', 'accountable', 'responsible', 'consulted', 'informed'),
+        allowNull: false
+      },
       personil_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -24,25 +29,23 @@ module.exports = {
           key: 'personil_id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
       },
-      role: {
-        type: Sequelize.ENUM('document_owner', 'developer', 'stakeholder', 'decider', 'accountable', 'responsible', 'consulted', 'informed'),
+      guidelines: {
+        type: Sequelize.TEXT,
         allowNull: false
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('PRD_Personil');
+    await queryInterface.dropTable('DARCIs');
   }
 };

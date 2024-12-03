@@ -2,15 +2,14 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Timeline extends Model {
+  class References extends Model {
     static associate(models) {
-      Timeline.belongsTo(models.PRD, { foreignKey: 'prd_id' });
-      Timeline.belongsTo(models.Personil, { foreignKey: 'pic', as: 'picPersonil' });
+      References.belongsTo(models.PRD, { foreignKey: 'prd_id' });
     }
   }
 
-  Timeline.init({
-    timeline_id: {
+  References.init({
+    reference_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
@@ -19,16 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    time_period: {
+    reference_link: {
       type: DataTypes.STRING,
-      allowNull: false
-    },
-    activity: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    pic: {
-      type: DataTypes.INTEGER,
       allowNull: false
     },
     createdAt: {
@@ -41,11 +32,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Timeline',
-    tableName: 'Timelines',
+    modelName: 'References',
+    tableName: 'References',
     timestamps: true,
     underscored: false
   });
 
-  return Timeline;
+  return References;
 };

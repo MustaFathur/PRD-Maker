@@ -1,8 +1,9 @@
 'use strict';
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Timelines', {
-      timeline_id: {
+    await queryInterface.createTable('User_Stories', {
+      story_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -17,36 +18,33 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      time_period: {
+      title: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      activity: {
-        type: Sequelize.STRING,
+      user_story: {
+        type: Sequelize.TEXT,
         allowNull: false
       },
-      pic: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Personils',
-          key: 'personil_id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+      acceptance_criteria: {
+        type: Sequelize.TEXT,
+        allowNull: false
       },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      priority: {
+        type: Sequelize.ENUM('low', 'medium', 'high'),
+        allowNull: false
       },
-      updated_at: {
+      createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Timelines');
+    await queryInterface.dropTable('User_Stories');
   }
 };

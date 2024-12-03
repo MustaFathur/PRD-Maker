@@ -71,5 +71,5 @@ module.exports = {
   getPersonilById,
   createPersonil,
   updatePersonil,
-  deletePersonil,
+  deletePersonil
 };

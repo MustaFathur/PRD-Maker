@@ -2,15 +2,14 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Timeline extends Model {
+  class ProblemStatement extends Model {
     static associate(models) {
-      Timeline.belongsTo(models.PRD, { foreignKey: 'prd_id' });
-      Timeline.belongsTo(models.Personil, { foreignKey: 'pic', as: 'picPersonil' });
+      ProblemStatement.belongsTo(models.PRD, { foreignKey: 'prd_id' });
     }
   }
 
-  Timeline.init({
-    timeline_id: {
+  ProblemStatement.init({
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
@@ -19,16 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    time_period: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    activity: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    pic: {
-      type: DataTypes.INTEGER,
+    content: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     createdAt: {
@@ -41,11 +32,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Timeline',
-    tableName: 'Timelines',
+    modelName: 'ProblemStatement',
+    tableName: 'ProblemStatements',
     timestamps: true,
     underscored: false
   });
 
-  return Timeline;
+  return ProblemStatement;
 };

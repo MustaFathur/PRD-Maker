@@ -34,11 +34,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL,
       allowNull: false
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     }
@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Success_Metrics',
     tableName: 'Success_Metrics',
     timestamps: true,
-    underscored: true
+    underscored: false
   });
 
   return Success_Metrics;

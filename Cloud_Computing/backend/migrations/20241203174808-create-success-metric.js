@@ -1,8 +1,9 @@
 'use strict';
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('User_Stories', {
-      story_id: {
+    await queryInterface.createTable('Success_Metrics', {
+      metric_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -17,35 +18,33 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      title: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      user_story: {
+      definition: {
         type: Sequelize.TEXT,
         allowNull: false
       },
-      acceptance_criteria: {
-        type: Sequelize.TEXT,
+      current: {
+        type: Sequelize.DECIMAL,
         allowNull: false
       },
-      priority: {
-        type: Sequelize.ENUM('low', 'medium', 'high'),
+      target: {
+        type: Sequelize.DECIMAL,
         allowNull: false
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('User_Stories');
+    await queryInterface.dropTable('Success_Metrics');
   }
 };

@@ -2,38 +2,41 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class References extends Model {
+  class Objective extends Model {
     static associate(models) {
-      References.belongsTo(models.PRD, { foreignKey: 'prd_id' });
+      Objective.belongsTo(models.PRD, { foreignKey: 'prd_id' });
     }
   }
 
-  References.init({
-    reference_id: {
+  Objective.init({
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
     prd_id: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
-    reference_link: {
-      type: DataTypes.STRING
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
-    modelName: 'References',
-    tableName: 'References',
-    timestamps: true
+    modelName: 'Objective',
+    tableName: 'Objectives',
+    timestamps: true,
+    underscored: false
   });
 
-  return References;
+  return Objective;
 };
