@@ -42,6 +42,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('regular', 'oauth'),
       defaultValue: 'regular',
       allowNull: false
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,

@@ -1,4 +1,4 @@
-const { User, Personil } = require('../models');
+const { Personil } = require('../models');
 
 const getAllPersonil = async (req, res) => {
   try {

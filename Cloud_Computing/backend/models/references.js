@@ -19,6 +19,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     reference_link: {
       type: DataTypes.STRING
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
