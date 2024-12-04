@@ -23,6 +23,10 @@ jobs:
       - name: Authenticate Docker with GCP
         run: gcloud auth configure-docker
 
+      - name: Authenticate Docker with GCP (Alternative)
+        run: |
+          echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} | docker login -u _json_key --password-stdin https://gcr.io
+
       - name: Check GCP Authentication
         run: gcloud auth list
 
