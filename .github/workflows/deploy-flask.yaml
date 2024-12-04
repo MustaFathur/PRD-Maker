@@ -23,6 +23,9 @@ jobs:
       - name: Authenticate Docker with GCP
         run: gcloud auth configure-docker
 
+      - name: Check GCP Authentication
+        run: gcloud auth list
+
       - name: Build and Push Docker Image
         run: |
           IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/flask-backend"
