@@ -5,7 +5,7 @@ const Handlebars = require('handlebars');
 const { Storage } = require('@google-cloud/storage');
 require('dotenv').config();
 
-// Inisialisasi Google Cloud Storage
+// Initialize Google Cloud Storage
 const storage = new Storage({
   projectId: process.env.GCLOUD_PROJECT_ID,
   keyFilename: process.env.GCLOUD_BUCKET_SERVICE_ACCOUNT,
@@ -39,18 +39,14 @@ const generatePDF = async (prdData) => {
   const page = await browser.newPage();
   await page.setContent(html, { waitUntil: 'networkidle0' });
 
-  // Define the file path to save the PDF locally
-  const pdfPath = path.join(__dirname, `../output/PRD_${prdData.prd_id}.pdf`);
-
-  // Save the PDF to the specified path
-  await page.pdf({ path: pdfPath, format: 'A4' });
+  // Generate PDF buffer
+  const pdfBuffer = await page.pdf({ format: 'A4' });
 
   await browser.close();
 
   // Upload the PDF to Google Cloud Storage
-  await storage.bucket(bucketName).upload(pdfPath, {
-    destination: `PRD_${prdData.prd_id}.pdf`,
-  });
+  const file = storage.bucket(bucketName).file(`PRD_${prdData.prd_id}.pdf`);
+  await file.save(pdfBuffer);
 
   console.log(`PDF uploaded to ${bucketName}/PRD_${prdData.prd_id}.pdf`);
 

@@ -4,20 +4,20 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class PRD extends Model {
     static associate(models) {
-      PRD.belongsTo(models.User, { foreignKey: 'user_id' });
-      PRD.belongsToMany(models.Personil, { through: models.PRD_Personil, foreignKey: 'prd_id' });
+      PRD.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
       PRD.hasMany(models.DARCI, { foreignKey: 'prd_id', as: 'darciRoles' });
       PRD.hasMany(models.Timeline, { foreignKey: 'prd_id', as: 'timelines' });
       PRD.hasMany(models.Success_Metrics, { foreignKey: 'prd_id', as: 'successMetrics' });
       PRD.hasMany(models.User_Stories, { foreignKey: 'prd_id', as: 'userStories' });
       PRD.hasMany(models.UI_UX, { foreignKey: 'prd_id', as: 'uiUx' });
       PRD.hasMany(models.References, { foreignKey: 'prd_id', as: 'references' });
-      PRD.hasMany(models.ProblemStatement, { foreignKey: 'prd_id', as: 'problemStatements' });
+      PRD.hasMany(models.Problem_Statement, { foreignKey: 'prd_id', as: 'problemStatements' });
       PRD.hasMany(models.Objective, { foreignKey: 'prd_id', as: 'objectives' });
-      PRD.hasMany(models.PRD_Personil, { foreignKey: 'prd_id', as: 'prdPersonils' }); 
+      PRD.hasMany(models.DocumentOwner, { foreignKey: 'prd_id', as: 'documentOwners' });
+      PRD.hasMany(models.Stakeholder, { foreignKey: 'prd_id', as: 'stakeholders' });
+      PRD.hasMany(models.Developer, { foreignKey: 'prd_id', as: 'developers' });
     }
   }
-
   PRD.init({
     prd_id: {
       type: DataTypes.INTEGER,

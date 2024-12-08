@@ -2,6 +2,10 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
+  responseType: 'json',
+  headers: {
+    'Accept': 'application/json, application/pdf'
+  },
   withCredentials: true, // Kirim cookie dengan setiap permintaan
 });
 

@@ -5,10 +5,8 @@ module.exports = (sequelize, DataTypes) => {
   class Timeline extends Model {
     static associate(models) {
       Timeline.belongsTo(models.PRD, { foreignKey: 'prd_id' });
-      Timeline.belongsTo(models.Personil, { foreignKey: 'pic', as: 'picPersonil' });
     }
   }
-
   Timeline.init({
     timeline_id: {
       type: DataTypes.INTEGER,
@@ -28,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     pic: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false
     },
     createdAt: {

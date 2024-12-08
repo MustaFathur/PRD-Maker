@@ -2,8 +2,8 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Timelines', {
-      timeline_id: {
+    await queryInterface.createTable('Document_Owners', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -18,31 +18,20 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      time_period: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      activity: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      pic: {
-        type: Sequelize.STRING,
-        allowNull: false
+      personil_name: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Timelines');
+    await queryInterface.dropTable('Document_Owners');
   }
 };

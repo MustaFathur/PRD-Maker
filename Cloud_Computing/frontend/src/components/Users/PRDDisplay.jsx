@@ -2,9 +2,25 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../Layout/Sidebar';
 import Navbar from '../Layout/Navbar';
+import api from '../../utils/api';
 
 const PRDDisplay = ({ prdData }) => {
   if (!prdData) return null;
+
+  const handleDownload = async () => {
+    try {
+      const response = await api.get(`/prd/download/${prdData.prd_id}`, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `PRD_${prdData.prd_id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading PRD:', error);
+    }
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -13,6 +29,9 @@ const PRDDisplay = ({ prdData }) => {
         <Navbar />
         <div className="p-8 bg-gray-50 min-h-screen flex flex-col items-center">
           <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg relative">
+            <Link to="/prd-list" className="text-xl absolute top-4 left-4 btn btn-ghost">
+              ← 
+            </Link>
             <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
               Product Requirements Document
             </h1>
@@ -35,15 +54,15 @@ const PRDDisplay = ({ prdData }) => {
                     </tr>
                     <tr>
                       <td className="font-bold">Document Owner</td>
-                      <td>{prdData.document_owner}</td>
+                      <td>{prdData.document_owner.join(', ')}</td>
                     </tr>
                     <tr>
                       <td className="font-bold">Developer</td>
-                      <td>{prdData.developer}</td>
+                      <td>{prdData.developer.join(', ')}</td>
                     </tr>
                     <tr>
                       <td className="font-bold">Stakeholder</td>
-                      <td>{prdData.stakeholder}</td>
+                      <td>{prdData.stakeholder.join(', ')}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -53,6 +72,31 @@ const PRDDisplay = ({ prdData }) => {
               <h2 className="text-2xl font-bold mb-2">Project Overview</h2>
               <div className="text-sm">{prdData.project_overview}</div>
             </div>
+
+            {/* Problem Statements */}
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold mb-2">Problem Statements</h2>
+              <div className="overflow-x-auto">
+                <ul className="text-sm list-disc list-inside">
+                  {prdData.problemStatements.map((statement, index) => (
+                    <li key={index}>{statement.content}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Objectives */}
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold mb-2">Objectives</h2>
+              <div className="overflow-x-auto">
+                <ul className="text-sm list-disc list-inside">
+                  {prdData.objectives.map((objective, index) => (
+                    <li key={index}>{objective.content}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
             <div className="mb-4">
               <h2 className="text-2xl font-bold mb-2">DARCI Roles</h2>
               <div className="overflow-x-auto">
@@ -151,6 +195,7 @@ const PRDDisplay = ({ prdData }) => {
             </div>
             <div className="flex justify-end">
               <Link to={`/prd/${prdData.prd_id}/edit`} className="btn btn-secondary">Edit PRD</Link>
+              <button className="btn btn-primary ml-2" onClick={handleDownload}>Download PRD</button>
             </div>
           </div>
         </div>

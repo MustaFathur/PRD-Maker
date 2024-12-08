@@ -22,14 +22,9 @@ module.exports = {
         type: Sequelize.ENUM('decider', 'accountable', 'responsible', 'consulted', 'informed'),
         allowNull: false
       },
-      personil_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Personils',
-          key: 'personil_id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+      personil_name: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       guidelines: {
         type: Sequelize.TEXT,
@@ -37,11 +32,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       }
     });
   },

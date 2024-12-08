@@ -5,11 +5,8 @@ module.exports = (sequelize, DataTypes) => {
   class Personil extends Model {
     static associate(models) {
       Personil.belongsTo(models.User, { foreignKey: 'created_by' });
-      Personil.belongsToMany(models.PRD, { through: models.PRD_Personil, foreignKey: 'personil_id' });
-      Personil.hasMany(models.Timeline, { foreignKey: 'pic' });
     }
   }
-
   Personil.init({
     personil_id: {
       type: DataTypes.INTEGER,

@@ -1,63 +1,76 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('PRDs', {
-      prd_id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      user_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'user_id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      document_version: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      product_name: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      document_stage: {
-        type: Sequelize.ENUM('draft', 'ongoing', 'completed'),
-        allowNull: false
-      },
-      project_overview: {
-        type: Sequelize.TEXT,
-        allowNull: false
-      },
-      created_date: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      start_date: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      end_date: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
-  },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('PRDs');
+const { Model } = require('sequelize');
+
+module.exports = (sequelize, DataTypes) => {
+  class PRD extends Model {
+    static associate(models) {
+      PRD.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
+      PRD.hasMany(models.DARCI, { foreignKey: 'prd_id', as: 'darciRoles' });
+      PRD.hasMany(models.Timeline, { foreignKey: 'prd_id', as: 'timelines' });
+      PRD.hasMany(models.Success_Metrics, { foreignKey: 'prd_id', as: 'successMetrics' });
+      PRD.hasMany(models.User_Stories, { foreignKey: 'prd_id', as: 'userStories' });
+      PRD.hasMany(models.UI_UX, { foreignKey: 'prd_id', as: 'uiUx' });
+      PRD.hasMany(models.References, { foreignKey: 'prd_id', as: 'references' });
+      PRD.hasMany(models.Problem_Statement, { foreignKey: 'prd_id', as: 'problemStatements' });
+      PRD.hasMany(models.Objective, { foreignKey: 'prd_id', as: 'objectives' });
+      PRD.hasMany(models.DocumentOwner, { foreignKey: 'prd_id', as: 'documentOwners' });
+      PRD.hasMany(models.Stakeholder, { foreignKey: 'prd_id', as: 'stakeholders' });
+      PRD.hasMany(models.Developer, { foreignKey: 'prd_id', as: 'developers' });
+    }
   }
+  PRD.init({
+    prd_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    document_version: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    product_name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    document_stage: {
+      type: DataTypes.ENUM('draft', 'ongoing', 'completed'),
+      allowNull: false
+    },
+    project_overview: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    created_date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    start_date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    end_date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    }
+  }, {
+    sequelize,
+    modelName: 'PRD',
+    tableName: 'PRDs',
+    timestamps: true,
+    underscored: false
+  });
+
+  return PRD;
 };

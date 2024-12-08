@@ -175,13 +175,13 @@ const Personil = () => {
                     <td className="border px-4 py-2">
                       {editPersonilId === p.personil_id ? (
                         <div className="flex space-x-2">
-                          <button className="btn btn-success" onClick={() => handleUpdatePersonil(p.personil_id)}>Save</button>
-                          <button className="btn btn-error" onClick={() => setEditPersonilId(null)}>Cancel</button>
+                          <button className="btn btn-neutral" onClick={() => handleUpdatePersonil(p.personil_id)}>Save</button>
+                          <button className="btn btn-active" onClick={() => setEditPersonilId(null)}>Cancel</button>
                         </div>
                       ) : (
                         <div className="flex space-x-2">
-                          <button className="btn btn-warning" onClick={() => { setEditPersonilId(p.personil_id); setEditPersonilName(p.personil_name); setEditPersonilRole(p.role); }}>Edit</button>
-                          <button className="btn btn-error" onClick={() => openDeleteConfirmModal(p.personil_id)}>Delete</button>
+                          <button className="btn btn-active" onClick={() => { setEditPersonilId(p.personil_id); setEditPersonilName(p.personil_name); setEditPersonilRole(p.role); }}>Edit</button>
+                          <button className="btn btn-neutral" onClick={() => openDeleteConfirmModal(p.personil_id)}>Delete</button>
                         </div>
                       )}
                     </td>
@@ -214,7 +214,7 @@ const Personil = () => {
             />
             <div className="flex justify-end space-x-2">
               <button className="btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
-              <button className="btn btn-success" onClick={handleCreatePersonil}>Add</button>
+              <button className="btn btn-neutral" onClick={handleCreatePersonil}>Add</button>
             </div>
           </div>
         </div>
@@ -228,7 +228,7 @@ const Personil = () => {
             <p>Are you sure you want to delete this personil?</p>
             <div className="flex justify-end space-x-2 mt-4">
               <button className="btn" onClick={() => setIsDeleteConfirmOpen(false)}>Cancel</button>
-              <button className="btn btn-error" onClick={handleDeletePersonil}>Delete</button>
+              <button className="btn btn-neutral" onClick={handleDeletePersonil}>Delete</button>
             </div>
           </div>
         </div>

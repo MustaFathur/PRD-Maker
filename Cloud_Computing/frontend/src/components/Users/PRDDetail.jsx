@@ -40,14 +40,9 @@ const PRDDetail = () => {
 
   const handleDownload = async () => {
     try {
-      const response = await api.get(`/prd/download/${id}`, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `PRD_${id}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const response = await api.get(`/prd/download/${id}`);
+      const { url } = response.data;
+      window.open(url, '_blank');
     } catch (error) {
       console.error('Error downloading PRD:', error);
       setError(error.message);
@@ -65,6 +60,9 @@ const PRDDetail = () => {
         <Navbar />
         <div className="p-8 bg-gray-50 min-h-screen flex flex-col items-center">
           <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg relative">
+            <Link to="/prd-list" className="text-xl absolute top-4 left-4 btn btn-ghost">
+              ← 
+            </Link>
             <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
               PRD Details
             </h1>
@@ -83,15 +81,15 @@ const PRDDetail = () => {
                     </tr>
                     <tr>
                       <td className="font-bold">Document Owner</td>
-                      <td>{prdData.document_owner}</td>
+                      <td>{prdData.document_owner.join(', ')}</td>
                     </tr>
                     <tr>
                       <td className="font-bold">Developer</td>
-                      <td>{prdData.developer}</td>
+                      <td>{prdData.developer.join(', ')}</td>
                     </tr>
                     <tr>
                       <td className="font-bold">Stakeholder</td>
-                      <td>{prdData.stakeholder}</td>
+                      <td>{prdData.stakeholder.join(', ')}</td>
                     </tr>
                     <tr>
                       <td className="font-bold">Project Overview</td>
@@ -109,6 +107,32 @@ const PRDDetail = () => {
                 </table>
               </div>
             </div>
+
+            {/* Problem Statements */}
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold mb-2">Problem Statements</h2>
+              <div className="overflow-x-auto">
+                <ul className="text-sm list-disc list-inside">
+                  {prdData.problemStatements.map((statement, index) => (
+                    <li key={index}>{statement.content}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Objectives */}
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold mb-2">Objectives</h2>
+              <div className="overflow-x-auto">
+                <ul className="text-sm list-disc list-inside">
+                  {prdData.objectives.map((objective, index) => (
+                    <li key={index}>{objective.content}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* DARCI Roles */}
             <div className="mb-4">
               <h2 className="text-2xl font-bold mb-2">DARCI Roles</h2>
               <div className="overflow-x-auto">
@@ -132,79 +156,120 @@ const PRDDetail = () => {
                 </table>
               </div>
             </div>
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold mb-2">Project Timeline</h2>
-              <div className="overflow-x-auto">
-                <table className="table table-xs">
-                  <thead>
-                    <tr>
-                      <th>Time Period</th>
-                      <th>Activity</th>
-                      <th>PIC</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {prdData.timelines.map((timeline, index) => (
-                      <tr key={index}>
-                        <td>{timeline.time_period}</td>
-                        <td>{timeline.activity}</td>
-                        <td>{timeline.pic}</td>
+
+            {/* Project Timeline */}
+            {prdData.timelines && prdData.timelines.length > 0 && (
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold mb-2">Project Timeline</h2>
+                <div className="overflow-x-auto">
+                  <table className="table table-xs">
+                    <thead>
+                      <tr>
+                        <th>Time Period</th>
+                        <th>Activity</th>
+                        <th>PIC</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {prdData.timelines.map((timeline, index) => (
+                        <tr key={index}>
+                          <td>{timeline.time_period}</td>
+                          <td>{timeline.activity}</td>
+                          <td>{timeline.pic}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold mb-2">Success Metrics</h2>
-              <div className="overflow-x-auto">
-                <table className="table table-xs">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Definition</th>
-                      <th>Current</th>
-                      <th>Target</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {prdData.successMetrics.map((metric, index) => (
-                      <tr key={index}>
-                        <td>{metric.name}</td>
-                        <td>{metric.definition}</td>
-                        <td>{metric.current}</td>
-                        <td>{metric.target}</td>
+            )}
+
+            {/* Success Metrics */}
+            {prdData.successMetrics && prdData.successMetrics.length > 0 && (
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold mb-2">Success Metrics</h2>
+                <div className="overflow-x-auto">
+                  <table className="table table-xs">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Definition</th>
+                        <th>Current</th>
+                        <th>Target</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {prdData.successMetrics.map((metric, index) => (
+                        <tr key={index}>
+                          <td>{metric.name}</td>
+                          <td>{metric.definition}</td>
+                          <td>{metric.current}</td>
+                          <td>{metric.target}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold mb-2">User Stories</h2>
-              <div className="overflow-x-auto">
-                <table className="table table-xs">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>User Story</th>
-                      <th>Acceptance Criteria</th>
-                      <th>Priority</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {prdData.userStories.map((story, index) => (
-                      <tr key={index}>
-                        <td>{story.title}</td>
-                        <td>{story.user_story}</td>
-                        <td>{story.acceptance_criteria}</td>
-                        <td>{story.priority}</td>
+            )}
+
+            {/* User Stories */}
+            {prdData.userStories && prdData.userStories.length > 0 && (
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold mb-2">User Stories</h2>
+                <div className="overflow-x-auto">
+                  <table className="table table-xs">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>User Story</th>
+                        <th>Acceptance Criteria</th>
+                        <th>Priority</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {prdData.userStories.map((story, index) => (
+                        <tr key={index}>
+                          <td>{story.title}</td>
+                          <td>{story.user_story}</td>
+                          <td>{story.acceptance_criteria}</td>
+                          <td>{story.priority}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* UI/UX */}
+            {prdData.uiUx && prdData.uiUx.length > 0 && (
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold mb-2">UI/UX</h2>
+                <div className="overflow-x-auto">
+                  <ul className="text-sm list-disc list-inside">
+                    {prdData.uiUx.map((uiux, index) => (
+                      <li key={index}><a href={uiux.link} target="_blank" rel="noopener noreferrer">{uiux.link}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* References */}
+            {prdData.references && prdData.references.length > 0 && (
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold mb-2">References</h2>
+                <div className="overflow-x-auto">
+                  <ul className="text-sm list-disc list-inside">
+                    {prdData.references.map((reference, index) => (
+                      <li key={index}><a href={reference.link} target="_blank" rel="noopener noreferrer">{reference.link}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
             <div className="flex justify-end">
               <Link to={`/prd/${prdData.prd_id}/edit`} className="btn btn-secondary">Edit PRD</Link>
               <button className="btn btn-primary ml-2" onClick={handleDownload}>Download PRD</button>

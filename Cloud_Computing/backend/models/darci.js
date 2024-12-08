@@ -5,10 +5,8 @@ module.exports = (sequelize, DataTypes) => {
   class DARCI extends Model {
     static associate(models) {
       DARCI.belongsTo(models.PRD, { foreignKey: 'prd_id' });
-      DARCI.belongsTo(models.Personil, { foreignKey: 'personil_id' });
     }
   }
-
   DARCI.init({
     darci_id: {
       type: DataTypes.INTEGER,
@@ -23,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('decider', 'accountable', 'responsible', 'consulted', 'informed'),
       allowNull: false
     },
-    personil_id: {
-      type: DataTypes.INTEGER,
+    personil_name: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     guidelines: {
