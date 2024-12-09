@@ -128,6 +128,7 @@ const getPRDById = async (req, res) => {
 
 const createPRD = async (req, res) => {
   try {
+    const flaskUrl = process.env.FLASK_URL || 'http://127.0.0.1:8080'
     const { document_version, product_name, document_owner, developer, stakeholder, project_overview, darci_roles, start_date, end_date } = req.body;
 
     // Fetch personil names based on IDs
@@ -163,7 +164,7 @@ const createPRD = async (req, res) => {
     };
 
     // Send data to LLM API
-    const response = await axios.post('http://127.0.0.1:8080/api/generate-prd', prdDataToSend);
+    const response = await axios.post(`${flaskUrl}/api/generate-prd`, prdDataToSend);
 
     // Log the response from LLM API
     console.log('Response from LLM API:', response.data);

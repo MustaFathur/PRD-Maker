@@ -220,7 +220,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => handleRemovePersonil(index, 'document_owner')}
                             >
                               Remove
@@ -233,7 +233,7 @@ const PRDEdit = () => {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => handleAddPersonil('document_owner')}
                 >
                   Add Document Owner
@@ -264,7 +264,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => handleRemovePersonil(index, 'stakeholder')}
                             >
                               Remove
@@ -277,7 +277,7 @@ const PRDEdit = () => {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => handleAddPersonil('stakeholder')}
                 >
                   Add Stakeholder
@@ -308,7 +308,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => handleRemovePersonil(index, 'developer')}
                             >
                               Remove
@@ -321,7 +321,7 @@ const PRDEdit = () => {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => handleAddPersonil('developer')}
                 >
                   Add Developer
@@ -372,7 +372,7 @@ const PRDEdit = () => {
                     ></textarea>
                     <button
                       type="button"
-                      className="btn btn-xs btn-error mt-2"
+                      className="btn btn-xs mt-2"
                       onClick={() => handleRemoveArrayItem(index, 'problemStatements')}
                     >
                       Remove
@@ -381,7 +381,7 @@ const PRDEdit = () => {
                 ))}
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => handleAddArrayItem('problemStatements', 'content')}
                 >
                   Add Problem Statement
@@ -400,7 +400,7 @@ const PRDEdit = () => {
                     ></textarea>
                     <button
                       type="button"
-                      className="btn btn-xs btn-error mt-2"
+                      className="btn btn-xs mt-2"
                       onClick={() => handleRemoveArrayItem(index, 'objectives')}
                     >
                       Remove
@@ -409,7 +409,7 @@ const PRDEdit = () => {
                 ))}
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => handleAddArrayItem('objectives', 'content')}
                 >
                   Add Objective
@@ -452,7 +452,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => handleRemoveDarciRole(index)}
                             >
                               Remove
@@ -468,7 +468,7 @@ const PRDEdit = () => {
                     <button
                       key={role}
                       type="button"
-                      className="btn btn-secondary mr-2"
+                      className="btn btn-active mr-2"
                       onClick={() => handleAddDarciRole(role)}
                     >
                       Add {role}
@@ -536,7 +536,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => {
                                 const newTimelines = prdData.timelines.filter((_, i) => i !== index);
                                 setPrdData({ ...prdData, timelines: newTimelines });
@@ -552,7 +552,7 @@ const PRDEdit = () => {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => setPrdData({ ...prdData, timelines: [...prdData.timelines, { time_period: '', activity: '', pic: '' }] })}
                 >
                   Add Timeline
@@ -633,7 +633,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => {
                                 const newMetrics = prdData.successMetrics.filter((_, i) => i !== index);
                                 setPrdData({ ...prdData, successMetrics: newMetrics });
@@ -649,7 +649,7 @@ const PRDEdit = () => {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => setPrdData({ ...prdData, successMetrics: [...prdData.successMetrics, { name: '', definition: '', current: '', target: '' }] })}
                 >
                   Add Metric
@@ -728,7 +728,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => {
                                 const newStories = prdData.userStories.filter((_, i) => i !== index);
                                 setPrdData({ ...prdData, userStories: newStories });
@@ -744,7 +744,7 @@ const PRDEdit = () => {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => setPrdData({ ...prdData, userStories: [...prdData.userStories, { title: '', user_story: '', acceptance_criteria: '', priority: '' }] })}
                 >
                   Add User Story
@@ -775,7 +775,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => handleRemoveArrayItem(index, 'ui_ux')}
                             >
                               Remove
@@ -788,7 +788,7 @@ const PRDEdit = () => {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => handleAddArrayItem('ui_ux', 'link')}
                 >
                   Add UI/UX
@@ -820,7 +820,7 @@ const PRDEdit = () => {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-xs btn-error"
+                              className="btn btn-xs"
                               onClick={() => handleRemoveArrayItem(index, 'references')}
                             >
                               Remove
@@ -833,14 +833,14 @@ const PRDEdit = () => {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-secondary mt-2"
+                  className="btn btn-active mt-2"
                   onClick={() => handleAddArrayItem('references', 'link')}
                 >
                   Add Reference
                 </button>
               </div>
               <div className="flex justify-end">
-                <button type="submit" className="btn btn-primary" disabled={loading}>
+                <button type="submit" className="btn btn-neutral" disabled={loading}>
                   {loading ? 'Updating...' : 'Update PRD'}
                 </button>
               </div>

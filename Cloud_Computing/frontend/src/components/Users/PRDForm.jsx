@@ -40,7 +40,7 @@ const SelectWithTags = ({ label, value, onChange, options, selectedIds, onAdd, o
       </select>
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-active"
         onClick={onAdd}
       >
         Add
@@ -305,7 +305,7 @@ const PRDForm = () => {
                 <div className="flex justify-end mt-6">
                   <button 
                     type="submit" 
-                    className="btn bg-violet-600 hover:bg-violet-700 text-white"
+                    className="btn btn-neutral"
                     disabled={loading}
                   >
                     Generate PRD

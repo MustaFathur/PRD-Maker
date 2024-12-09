@@ -171,14 +171,12 @@ const verifyToken = (req, res) => {
 
 const googleOAuthCallback = async (req, res) => {
   try {
-    // Generate JWT token
     const token = jwt.sign({ id: req.user.user_id }, process.env.JWT_SECRET, { expiresIn: '15m' });
     const refreshToken = jwt.sign({ id: req.user.user_id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+    const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
-    // Update user with refresh token
     await req.user.update({ refresh_token: refreshToken });
 
-    // Set JWT token in cookies
     res.cookie('jwt', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -192,8 +190,7 @@ const googleOAuthCallback = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    // Redirect the user to the dashboard after successful login
-    res.redirect('http://localhost:5173/dashboard');
+    res.redirect(`${frontendURL}/dashboard`);
   } catch (error) {
     console.error('Error during OAuth callback:', error);
     res.redirect('/register');

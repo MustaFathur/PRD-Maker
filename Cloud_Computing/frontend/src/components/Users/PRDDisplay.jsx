@@ -7,18 +7,14 @@ import api from '../../utils/api';
 const PRDDisplay = ({ prdData }) => {
   if (!prdData) return null;
 
-  const handleDownload = async () => {
+  const handleDownload = async (id) => {
     try {
-      const response = await api.get(`/prd/download/${prdData.prd_id}`, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `PRD_${prdData.prd_id}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const response = await api.get(`/prd/download/${id}`);
+      const { url } = response.data;
+      window.open(url, '_blank');
     } catch (error) {
       console.error('Error downloading PRD:', error);
+      setError(error.message);
     }
   };
 
@@ -194,8 +190,8 @@ const PRDDisplay = ({ prdData }) => {
               </div>
             </div>
             <div className="flex justify-end">
-              <Link to={`/prd/${prdData.prd_id}/edit`} className="btn btn-secondary">Edit PRD</Link>
-              <button className="btn btn-primary ml-2" onClick={handleDownload}>Download PRD</button>
+              <Link to={`/prd/${prdData.prd_id}/edit`} className="btn btn-active">Edit PRD</Link>
+              <button className="btn btn-neutral ml-2" onClick={handleDownload}>Download PRD</button>
             </div>
           </div>
         </div>

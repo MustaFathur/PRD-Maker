@@ -38,7 +38,7 @@ const PRDDetail = () => {
     fetchPRD();
   }, [id]);
 
-  const handleDownload = async () => {
+  const handleDownload = async (id) => {
     try {
       const response = await api.get(`/prd/download/${id}`);
       const { url } = response.data;
@@ -271,8 +271,8 @@ const PRDDetail = () => {
             )}
 
             <div className="flex justify-end">
-              <Link to={`/prd/${prdData.prd_id}/edit`} className="btn btn-secondary">Edit PRD</Link>
-              <button className="btn btn-primary ml-2" onClick={handleDownload}>Download PRD</button>
+              <Link to={`/prd/${prdData.prd_id}/edit`} className="btn btn-active">Edit PRD</Link>
+              <button className="btn btn-neutral ml-2" onClick={handleDownload}>Download PRD</button>
             </div>
           </div>
         </div>
