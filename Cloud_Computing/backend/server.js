@@ -1,16 +1,15 @@
+require('dotenv').config()
 const express = require("express");
 const session = require('express-session');
 const passport = require('./config/passport');
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const db = require("./models");
 const authRoutes = require("./routes/authRoutes");
 const prdRoutes = require("./routes/prdRoutes");
 const personilRoutes = require("./routes/personilRoutes");
 
-dotenv.config();
 
 const app = express();
 
@@ -26,7 +25,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.REACT_URL,
     credentials: true,
 }));
 app.use(bodyParser.json());
@@ -52,3 +51,6 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+console.log(process.env.NODE_ENV, process.env.DB_TEST_HOST);
+console.log("test");
