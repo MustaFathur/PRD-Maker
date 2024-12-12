@@ -1,58 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from '../Layout/Sidebar';
-import Navbar from '../Layout/Navbar';
-import PRDDisplay from './PRDDisplay';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Sidebar from "../Layout/Sidebar";
+import Navbar from "../Layout/Navbar";
+import PRDDisplay from "./PRDDisplay";
+import api from "../../utils/api";
+
+const PersonilTag = ({ name, onRemove }) => (
+  <div className="inline-flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">
+    <span className="text-sm">{name}</span>
+    <button
+      type="button"
+      onClick={onRemove}
+      className="text-gray-400 hover:text-gray-600 ml-1"
+    >
+      ×
+    </button>
+  </div>
+);
+
+const SelectWithTags = ({
+  label,
+  value,
+  onChange,
+  options,
+  selectedIds,
+  onAdd,
+  onRemove,
+  error,
+}) => (
+  <div className="space-y-2">
+    <label className="text-sm font-medium">{label}</label>
+    <div className="flex gap-2">
+      <select
+        className={`select select-bordered flex-1 ${
+          error ? "border-red-500" : ""
+        }`}
+        value={value}
+        onChange={onChange}
+      >
+        <option value="">Select personil</option>
+        {options.map((option) => (
+          <option key={option.personil_id} value={option.personil_id}>
+            {option.personil_name}
+          </option>
+        ))}
+      </select>
+      <button type="button" className="btn btn-active" onClick={onAdd}>
+        Add
+      </button>
+    </div>
+    {error && <p className="text-red-500 text-sm">{error}</p>}
+    <div className="flex flex-wrap gap-2 mt-2">
+      {selectedIds.map((id) => {
+        const personil = options.find(
+          (option) => option.personil_id === Number(id)
+        );
+        return (
+          <PersonilTag
+            key={id}
+            name={personil ? personil.personil_name : "Unknown"}
+            onRemove={() => onRemove(id)}
+          />
+        );
+      })}
+    </div>
+  </div>
+);
 
 const PRDForm = () => {
-  const [productName, setProductName] = useState('');
-  const [documentVersion, setDocumentVersion] = useState('');
+  const [productName, setProductName] = useState("");
+  const [documentVersion, setDocumentVersion] = useState("");
   const [documentOwner, setDocumentOwner] = useState([]);
   const [developer, setDeveloper] = useState([]);
   const [stakeholder, setStakeholder] = useState([]);
-  const [projectOverview, setProjectOverview] = useState('');
+  const [projectOverview, setProjectOverview] = useState("");
   const [darciRoles, setDarciRoles] = useState({
     decider: [],
     accountable: [],
     responsible: [],
     consulted: [],
-    informed: []
+    informed: [],
   });
   const [selectedPersonil, setSelectedPersonil] = useState({
-    documentOwner: '',
-    developer: '',
-    stakeholder: '',
-    decider: '',
-    accountable: '',
-    responsible: '',
-    consulted: '',
-    informed: ''
+    documentOwner: "",
+    developer: "",
+    stakeholder: "",
+    decider: "",
+    accountable: "",
+    responsible: "",
+    consulted: "",
+    informed: "",
   });
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [generatedPRD, setGeneratedPRD] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [personil, setPersonil] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     const fetchPersonil = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/personil', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies in the request
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch personil data');
-        }
-
-        const data = await response.json();
-        setPersonil(data);
+        const response = await api.get("/personil");
+        setPersonil(response.data);
       } catch (error) {
-        console.error('Error fetching personil data:', error);
+        console.error("Error fetching personil:", error);
         setError(error.message);
       }
     };
@@ -60,59 +113,48 @@ const PRDForm = () => {
     fetchPersonil();
   }, []);
 
-  const handleAddPersonil = (role) => {
-    if (selectedPersonil[role]) {
-      setDarciRoles({
-        ...darciRoles,
-        [role]: [...darciRoles[role], selectedPersonil[role]]
-      });
-      setSelectedPersonil({ ...selectedPersonil, [role]: '' });
-    }
+  const validateForm = () => {
+    const errors = {};
+    if (!documentVersion)
+      errors.documentVersion = "Document version is required.";
+    if (!productName) errors.productName = "Product name is required.";
+    if (documentOwner.length === 0)
+      errors.documentOwner = "At least one document owner is required.";
+    if (developer.length === 0)
+      errors.developer = "At least one developer is required.";
+    if (stakeholder.length === 0)
+      errors.stakeholder = "At least one stakeholder is required.";
+    if (!projectOverview)
+      errors.projectOverview = "Project overview is required.";
+    if (!startDate) errors.startDate = "Start date is required.";
+    if (!endDate) errors.endDate = "End date is required.";
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     setLoading(true);
     setError(null);
 
     const prdData = {
-      productName,
-      documentVersion,
-      documentOwner,
-      developer,
-      stakeholder,
-      projectOverview,
-      darciRoles,
-      startDate,
-      endDate
+      document_version: documentVersion,
+      product_name: productName,
+      document_owner: documentOwner,
+      developer: developer,
+      stakeholder: stakeholder,
+      project_overview: projectOverview,
+      darci_roles: darciRoles,
+      start_date: startDate,
+      end_date: endDate,
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/prd/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(prdData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate PRD");
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let result = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        result += decoder.decode(value);
-      }
-
-      const parsedResult = JSON.parse(result);
-      setGeneratedPRD(parsedResult.prd);
-
+      const response = await api.post("/prd", prdData);
+      setGeneratedPRD(response.data);
     } catch (error) {
       console.error("Error generating PRD:", error);
       setError(error.message);
@@ -126,229 +168,237 @@ const PRDForm = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-base-100">
+      {loading && (
+        <div
+          className="loading-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+        >
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      )}
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1">
         <Navbar />
-        <div className="p-8 bg-gray-50 min-h-screen flex flex-col items-center">
-          <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg relative">
-            <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-              Product Requirements Document
-            </h1>
-            <form onSubmit={handleSubmit}>
-              <h2 className="text-2xl font-bold mb-4">Create New PRD</h2>
-              {error && <div className="text-red-500 mb-4">{error}</div>}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="mb-4">
-                  <label className="block text-gray-700">Product Name</label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={productName}
-                    onChange={(e) => setProductName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">Document Version</label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={documentVersion}
-                    onChange={(e) => setDocumentVersion(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">Document Owner</label>
-                  <div className="flex">
-                    <select
-                      className="input input-bordered w-full"
-                      value={selectedPersonil.documentOwner}
-                      onChange={(e) => setSelectedPersonil({ ...selectedPersonil, documentOwner: e.target.value })}
-                    >
-                      <option value="">Select Document Owner</option>
-                      {personil.filter(user => !documentOwner.includes(user.personil_id)).map((user) => (
-                        <option key={user.personil_id} value={user.personil_id}>
-                          {user.personil_name}
-                        </option>
-                      ))}
-                    </select>
-                    <button type="button" className="btn btn-secondary ml-2" onClick={() => setDocumentOwner([...documentOwner, selectedPersonil.documentOwner])}>
-                      Add
-                    </button>
-                  </div>
-                  <div className="mt-2 flex flex-wrap">
-                    {documentOwner.map((id) => (
-                      <div key={id} className="flex items-center mr-2 mb-2">
-                        <span className="badge badge-primary mr-2">
-                          {personil.find((user) => user.personil_id === id)?.personil_name}
-                        </span>
-                        <button
-                          type="button"
-                          className="btn btn-xs btn-error"
-                          onClick={() => setDocumentOwner(documentOwner.filter((owner) => owner !== id))}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">Developer</label>
-                  <div className="flex">
-                    <select
-                      className="input input-bordered w-full"
-                      value={selectedPersonil.developer}
-                      onChange={(e) => setSelectedPersonil({ ...selectedPersonil, developer: e.target.value })}
-                    >
-                      <option value="">Select Developer</option>
-                      {personil.filter(user => !developer.includes(user.personil_id)).map((user) => (
-                        <option key={user.personil_id} value={user.personil_id}>
-                          {user.personil_name}
-                        </option>
-                      ))}
-                    </select>
-                    <button type="button" className="btn btn-secondary ml-2" onClick={() => setDeveloper([...developer, selectedPersonil.developer])}>
-                      Add
-                    </button>
-                  </div>
-                  <div className="mt-2 flex flex-wrap">
-                    {developer.map((id) => (
-                      <div key={id} className="flex items-center mr-2 mb-2">
-                        <span className="badge badge-primary mr-2">
-                          {personil.find((user) => user.personil_id === id)?.personil_name}
-                        </span>
-                        <button
-                          type="button"
-                          className="btn btn-xs btn-error"
-                          onClick={() => setDeveloper(developer.filter((dev) => dev !== id))}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">Stakeholder</label>
-                  <div className="flex">
-                    <select
-                      className="input input-bordered w-full"
-                      value={selectedPersonil.stakeholder}
-                      onChange={(e) => setSelectedPersonil({ ...selectedPersonil, stakeholder: e.target.value })}
-                    >
-                      <option value="">Select Stakeholder</option>
-                      {personil.filter(user => !stakeholder.includes(user.personil_id)).map((user) => (
-                        <option key={user.personil_id} value={user.personil_id}>
-                          {user.personil_name}
-                        </option>
-                      ))}
-                    </select>
-                    <button type="button" className="btn btn-secondary ml-2" onClick={() => setStakeholder([...stakeholder, selectedPersonil.stakeholder])}>
-                      Add
-                    </button>
-                  </div>
-                  <div className="mt-2 flex flex-wrap">
-                    {stakeholder.map((id) => (
-                      <div key={id} className="flex items-center mr-2 mb-2">
-                        <span className="badge badge-primary mr-2">
-                          {personil.find((user) => user.personil_id === id)?.personil_name}
-                        </span>
-                        <button
-                          type="button"
-                          className="btn btn-xs btn-error"
-                          onClick={() => setStakeholder(stakeholder.filter((stake) => stake !== id))}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="mb-4 md:col-span-2">
-                  <label className="block text-gray-700">Project Overview</label>
-                  <textarea
-                    className="textarea textarea-bordered w-full"
-                    value={projectOverview}
-                    onChange={(e) => setProjectOverview(e.target.value)}
-                    required
-                  ></textarea>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">Start Date</label>
-                  <input
-                    type="date"
-                    className="input input-bordered w-full"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700">End Date</label>
-                  <input
-                    type="date"
-                    className="input input-bordered w-full"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-              <fieldset className="border border-gray-300 rounded-lg p-6 mb-4">
-                <legend className="text-xl font-semibold text-gray-700">DARCI Roles</legend>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {Object.keys(darciRoles).map((role) => (
-                    <div key={role} className="mb-4">
-                      <label className="block text-gray-700 capitalize">{role}</label>
-                      <div className="flex">
-                        <select
-                          className="input input-bordered w-full"
-                          value={selectedPersonil[role]}
-                          onChange={(e) => setSelectedPersonil({ ...selectedPersonil, [role]: e.target.value })}
-                        >
-                          <option value="">Select {role}</option>
-                          {personil.filter(user => !darciRoles[role].includes(user.personil_id)).map((user) => (
-                            <option key={user.personil_id} value={user.personil_id}>
-                              {user.personil_name}
-                            </option>
-                          ))}
-                        </select>
-                        <button type="button" className="btn btn-secondary ml-2" onClick={() => handleAddPersonil(role)}>
-                          Add
-                        </button>
-                      </div>
-                      <div className="mt-2 flex flex-wrap">
-                        {darciRoles[role].map((id) => (
-                          <div key={id} className="flex items-center mr-2 mb-2">
-                            <span className="badge badge-primary mr-2">
-                              {personil.find((user) => user.personil_id === id)?.personil_name}
-                            </span>
-                            <button
-                              type="button"
-                              className="btn btn-xs btn-error"
-                              onClick={() => setDarciRoles({
-                                ...darciRoles,
-                                [role]: darciRoles[role].filter((personilId) => personilId !== id)
-                              })}
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        ))}
-                      </div>
+        <div className="p-8">
+          <div className="max-w-4xl mx-auto mt-8">
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 relative">
+              <Link
+                to="/prd-list"
+                className="text-xl absolute top-4 left-4 btn btn-ghost"
+              >
+                ←
+              </Link>
+              <h1 className="text-3xl font-bold text-center mb-2 text-gray-800">
+                Product Requirements Document
+              </h1>
+              <p className="text-center text-gray-600 mb-8">
+                Create a new PRD by filling out the form below
+              </p>
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="space-y-6">
+                  <h2 className="text-lg font-semibold">Basic Information</h2>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Document Version
+                      </label>
+                      <input
+                        type="text"
+                        className={`input input-bordered w-full ${
+                          formErrors.documentVersion ? "border-red-500" : ""
+                        }`}
+                        placeholder="e.g., 1.0.0"
+                        value={documentVersion}
+                        onChange={(e) => setDocumentVersion(e.target.value)}
+                      />
+                      {formErrors.documentVersion && (
+                        <p className="text-red-500 text-sm">
+                          {formErrors.documentVersion}
+                        </p>
+                      )}
                     </div>
-                  ))}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Product Name
+                      </label>
+                      <input
+                        type="text"
+                        className={`input input-bordered w-full ${
+                          formErrors.productName ? "border-red-500" : ""
+                        }`}
+                        placeholder="Enter product name"
+                        value={productName}
+                        onChange={(e) => setProductName(e.target.value)}
+                      />
+                      {formErrors.productName && (
+                        <p className="text-red-500 text-sm">
+                          {formErrors.productName}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Project Overview
+                    </label>
+                    <textarea
+                      className={`textarea textarea-bordered w-full h-24 ${
+                        formErrors.projectOverview ? "border-red-500" : ""
+                      }`}
+                      placeholder="Describe your project"
+                      value={projectOverview}
+                      onChange={(e) => setProjectOverview(e.target.value)}
+                    ></textarea>
+                    {formErrors.projectOverview && (
+                      <p className="text-red-500 text-sm">
+                        {formErrors.projectOverview}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </fieldset>
-              <div className="flex justify-end">
-                <button type="submit" className="btn btn-primary" disabled={loading}>
-                  {loading ? 'Generating PRD...' : 'Generate PRD'}
-                </button>
-              </div>
-            </form>
+
+                <div className="space-y-6">
+                  <h2 className="text-lg font-semibold">Team Assignment</h2>
+                  <SelectWithTags
+                    label="Document Owner"
+                    value={selectedPersonil.documentOwner}
+                    onChange={(e) =>
+                      setSelectedPersonil({
+                        ...selectedPersonil,
+                        documentOwner: e.target.value,
+                      })
+                    }
+                    options={personil}
+                    selectedIds={documentOwner}
+                    onAdd={() =>
+                      setDocumentOwner([
+                        ...documentOwner,
+                        Number(selectedPersonil.documentOwner),
+                      ])
+                    }
+                    onRemove={(id) =>
+                      setDocumentOwner(
+                        documentOwner.filter((ownerId) => ownerId !== id)
+                      )
+                    }
+                    error={formErrors.documentOwner}
+                  />
+
+                  <SelectWithTags
+                    label="Developer"
+                    value={selectedPersonil.developer}
+                    onChange={(e) =>
+                      setSelectedPersonil({
+                        ...selectedPersonil,
+                        developer: e.target.value,
+                      })
+                    }
+                    options={personil}
+                    selectedIds={developer}
+                    onAdd={() =>
+                      setDeveloper([
+                        ...developer,
+                        Number(selectedPersonil.developer),
+                      ])
+                    }
+                    onRemove={(id) =>
+                      setDeveloper(developer.filter((devId) => devId !== id))
+                    }
+                    error={formErrors.developer}
+                  />
+
+                  <SelectWithTags
+                    label="Stakeholder"
+                    value={selectedPersonil.stakeholder}
+                    onChange={(e) =>
+                      setSelectedPersonil({
+                        ...selectedPersonil,
+                        stakeholder: e.target.value,
+                      })
+                    }
+                    options={personil}
+                    selectedIds={stakeholder}
+                    onAdd={() =>
+                      setStakeholder([
+                        ...stakeholder,
+                        Number(selectedPersonil.stakeholder),
+                      ])
+                    }
+                    onRemove={(id) =>
+                      setStakeholder(
+                        stakeholder.filter((stakeId) => stakeId !== id)
+                      )
+                    }
+                    error={formErrors.stakeholder}
+                  />
+                </div>
+
+                <div className="space-y-6">
+                  <h2 className="text-lg font-semibold">Project Timeline</h2>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Start Date
+                      </label>
+                      <input
+                        type="date"
+                        className={`input input-bordered w-full ${
+                          formErrors.startDate ? "border-red-500" : ""
+                        }`}
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                      />
+                      {formErrors.startDate && (
+                        <p className="text-red-500 text-sm">
+                          {formErrors.startDate}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        End Date
+                      </label>
+                      <input
+                        type="date"
+                        className={`input input-bordered w-full ${
+                          formErrors.endDate ? "border-red-500" : ""
+                        }`}
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                      />
+                      {formErrors.endDate && (
+                        <p className="text-red-500 text-sm">
+                          {formErrors.endDate}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end mt-6">
+                  <button
+                    type="submit"
+                    className="btn btn-neutral"
+                    disabled={loading}
+                  >
+                    Generate PRD
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
