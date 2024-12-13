@@ -83,3 +83,30 @@ The overall architecture demonstrates a multi-tier approach where the user inter
    ```bash
    git clone https://github.com/MustaFathur/PRD-Maker-With-LLM.git
    cd PRD-Maker-With-LLM
+
+2. Install dependencies and Run the services locally:
+   ```bash
+   # For frontend
+   cd Cloud_Computing/frontend
+   npm install
+   npm run tailwind
+   npm run dev
+
+   # For backend (Express)
+   cd Cloud_Computing/backend
+   npm install
+   
+   # Update the .env file with your database credentials
+
+   # Run migrations
+   npx sequelize-cli db:migrate
+
+   npm run dev
+
+   # For LLM (Flask)
+
+   # Update the .env file with your AI model credentials
+
+   cd Machine_Learning
+   pip install -r requirements.txt
+   python app/main.py
