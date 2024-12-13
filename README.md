@@ -35,6 +35,7 @@ We are a team of Bangkit 2024 Cohorts from different learning paths and universi
 | ![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white) | Cloud Technology for Deployment.       |
 
 ## GCP Architecture: Bangkit 2024 Capstone Project Company Case Algo Network - PRD Maker with LLM
+![Capstone-Project-GCP-Architecture](https://github.com/user-attachments/assets/5388ddae-eb46-4fe3-84c8-40a84a93d2e7)
 
 ### 1. User Interaction with the Frontend
 
