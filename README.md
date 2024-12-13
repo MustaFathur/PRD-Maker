@@ -28,11 +28,11 @@ We are a team of Bangkit 2024 Cohorts from different learning paths and universi
 | ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black) | Frontend Framework  |
 | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) | API and Routing |
 | ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) | Backend Framework |
-| ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) | Programming Language for Backend (Flask). |
+| ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) | Programming Language for Backend (Flask) |
 | ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) | Backend for LLM API |
 | ![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) | For Modern Styling  |
-| ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) | For Containerizing the Backend Application. |
-| ![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white) | Cloud Technology for Deployment.       |
+| ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) | For Containerizing the Backend Application |
+| ![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white) | Cloud Technology for Deployment       |
 
 ## GCP Architecture: Bangkit 2024 Capstone Project Company Case Algo Network - PRD Maker with LLM
 ![Capstone-Project-GCP-Architecture](https://github.com/user-attachments/assets/5388ddae-eb46-4fe3-84c8-40a84a93d2e7)
@@ -60,8 +60,6 @@ The Express Backend interacts with the Cloud SQL database for data storage and o
 ### 6. Backend Express Interaction with Backend Flask
 
 The Express Backend interacts with the Backend Flask specifically for the PRD Generation API. The Backend Flask component is responsible for generating the PRD document using a Large Language Model (LLM) API, which in this case, is the OpenAI model.
-
-The overall architecture demonstrates a multi-tier approach where the user interface is separated from the backend logic, and the backend logic is further divided into different components (Express and Flask) to handle specific responsibilities. This separation of concerns and modular design allows for better maintainability, scalability, and flexibility in the application's development and deployment.
 
 ## **Project Workflow**
 
