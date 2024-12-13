@@ -67,12 +67,12 @@ The overall architecture demonstrates a multi-tier approach where the user inter
 
 ### **Frontend**:
 1. Users fill in the PRD form via a React-based UI.
-2. Form inputs are converted into a JSON object.
 
 ### **Backend**:
-1. **Flask** processes the input JSON via an LLM API (Gemini).
+1. **Express** stored the User PRD data input and send it to the Flask API.
+1. **Flask** processes the PRD data input via an LLM API (OpenAI).
 2. LLM generates optimized PRD content.
-3. Generated JSON output.
+3. Generated output sended back to Express and stored in the database.
 
 ### **Output**:
 1. The generated PRD is displayed in real-time on the frontend (editable).
@@ -104,9 +104,8 @@ The overall architecture demonstrates a multi-tier approach where the user inter
    npm run dev
 
    # For LLM (Flask)
-
-   # Update the .env file with your AI model credentials
-
    cd Machine_Learning
    pip install -r requirements.txt
+
+   # Update the .env file with your AI model credentials
    python app/main.py
