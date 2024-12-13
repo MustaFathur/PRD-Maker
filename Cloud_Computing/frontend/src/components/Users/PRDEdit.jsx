@@ -18,6 +18,7 @@ const PRDEdit = () => {
         const response = await api.get(`/prd/${id}`);
         const data = response.data;
         console.log('Fetched PRD data:', data);
+        
         // Initialize arrays if not present
         data.darciRoles = data.darciRoles || [];
         data.timelines = data.timelines || [];

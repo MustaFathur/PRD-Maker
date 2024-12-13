@@ -31,7 +31,7 @@ module.exports = {
         allowNull: false
       },
       priority: {
-        type: Sequelize.ENUM('low', 'medium', 'high'),
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {

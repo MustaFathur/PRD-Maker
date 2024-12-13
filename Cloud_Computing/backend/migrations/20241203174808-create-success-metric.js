@@ -27,11 +27,11 @@ module.exports = {
         allowNull: false
       },
       current: {
-        type: Sequelize.DECIMAL,
+        type: Sequelize.STRING,
         allowNull: false
       },
       target: {
-        type: Sequelize.DECIMAL,
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {

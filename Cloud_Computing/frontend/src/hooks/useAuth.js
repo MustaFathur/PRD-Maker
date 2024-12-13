@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import api from '../utils/api';
 
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -6,11 +7,9 @@ const useAuth = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/auth/verify-token', {
-          credentials: 'include',
-        });
+        const response = await api.get('/auth/verify-token', { withCredentials: true });
 
-        if (response.ok) {
+        if (response.status === 200) {
           setIsAuthenticated(true);
         } else {
           setIsAuthenticated(false);

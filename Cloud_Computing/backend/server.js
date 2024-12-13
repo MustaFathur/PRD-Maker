@@ -24,8 +24,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+console.log(`Frontend URL: ${process.env.FRONTEND_URL}`);
+
 app.use(cors({
-    origin: process.env.REACT_URL,
+    origin: process.env.FRONTEND_URL,
     credentials: true,
 }));
 app.use(bodyParser.json());

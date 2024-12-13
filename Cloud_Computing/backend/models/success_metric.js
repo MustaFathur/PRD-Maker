@@ -27,11 +27,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     current: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.STRING,
       allowNull: false
     },
     target: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.STRING,
       allowNull: false
     },
     createdAt: {

@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import Sidebar from '../Layout/Sidebar';
 import Navbar from '../Layout/Navbar';
+import api from '../../utils/api';
 
 const Dashboard = () => {
   const isAuthenticated = useAuth();
@@ -12,15 +13,13 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/prd/dashboard', {
-          credentials: 'include', // Include cookies in the request
-        });
+        const response = await api.get('/prd/dashboard', { withCredentials: true });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error('Failed to fetch dashboard data');
         }
 
-        const data = await response.json();
+        const data = response.data;
         setDashboardData(data);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);

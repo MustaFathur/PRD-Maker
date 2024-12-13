@@ -6,8 +6,6 @@ import PRDDisplay from './PRDDisplay';
 import api from '../../utils/api';
 
 const PersonilTag = ({ name, onRemove }) => {
-  console.log('PersonilTag rendered with name:', name);
-
   return (
     <div className="inline-flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">
       <span className="text-sm">{name}</span>
@@ -22,7 +20,7 @@ const PersonilTag = ({ name, onRemove }) => {
   );
 };
 
-const SelectWithTags = ({ label, value, onChange, options, selectedIds, onAdd, onRemove }) => (
+const SelectWithTags = ({ label, value, onChange, options, selectedIds, onAdd, onRemove, error }) => (
   <div className="space-y-2">
     <label className="text-sm font-medium">{label}</label>
     <div className="flex gap-2">
@@ -46,12 +44,10 @@ const SelectWithTags = ({ label, value, onChange, options, selectedIds, onAdd, o
         Add
       </button>
     </div>
+    {error && <p className="text-red-500 text-sm">{error}</p>}
     <div className="flex flex-wrap gap-2 mt-2">
       {selectedIds.map(id => {
         const personil = options.find(option => option.personil_id === Number(id));
-        console.log('Selected personil:', personil);
-        console.log('Options:', options);
-        console.log('Selected ID:', id);
         return (
           <PersonilTag
             key={id}
@@ -94,13 +90,13 @@ const PRDForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [personil, setPersonil] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchPersonil = async () => {
       try {
         const response = await api.get('/personil');
         setPersonil(response.data);
-        console.log('Fetched personil data:', response.data);
       } catch (error) {
         console.error('Error fetching personil:', error);
         setError(error.message);
@@ -120,8 +116,28 @@ const PRDForm = () => {
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!documentVersion) newErrors.documentVersion = 'Document version is required';
+    if (!productName) newErrors.productName = 'Product name is required';
+    if (!projectOverview) newErrors.projectOverview = 'Project overview is required';
+    if (!startDate) newErrors.startDate = 'Start date is required';
+    if (!endDate) newErrors.endDate = 'End date is required';
+    if (documentOwner.length === 0) newErrors.documentOwner = 'At least one document owner is required';
+    if (developer.length === 0) newErrors.developer = 'At least one developer is required';
+    if (stakeholder.length === 0) newErrors.stakeholder = 'At least one stakeholder is required';
+    if (darciRoles.decider.length === 0) newErrors.decider = 'At least one decider is required';
+    if (darciRoles.accountable.length === 0) newErrors.accountable = 'At least one accountable is required';
+    if (darciRoles.responsible.length === 0) newErrors.responsible = 'At least one responsible is required';
+    if (darciRoles.consulted.length === 0) newErrors.consulted = 'At least one consulted is required';
+    if (darciRoles.informed.length === 0) newErrors.informed = 'At least one informed is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     setLoading(true);
     setError(null);
 
@@ -198,6 +214,7 @@ const PRDForm = () => {
                         value={documentVersion}
                         onChange={(e) => setDocumentVersion(e.target.value)}
                       />
+                      {errors.documentVersion && <p className="text-red-500 text-sm">{errors.documentVersion}</p>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Product Name</label>
@@ -208,6 +225,7 @@ const PRDForm = () => {
                         value={productName}
                         onChange={(e) => setProductName(e.target.value)}
                       />
+                      {errors.productName && <p className="text-red-500 text-sm">{errors.productName}</p>}
                     </div>
                   </div>
 
@@ -219,6 +237,7 @@ const PRDForm = () => {
                       value={projectOverview}
                       onChange={(e) => setProjectOverview(e.target.value)}
                     ></textarea>
+                    {errors.projectOverview && <p className="text-red-500 text-sm">{errors.projectOverview}</p>}
                   </div>
                 </div>
 
@@ -233,6 +252,7 @@ const PRDForm = () => {
                       selectedIds={documentOwner}
                       onAdd={() => setDocumentOwner([...documentOwner, Number(selectedPersonil.documentOwner)])}
                       onRemove={(id) => setDocumentOwner(documentOwner.filter(ownerId => ownerId !== id))}
+                      error={errors.documentOwner}
                     />
 
                     <SelectWithTags
@@ -243,6 +263,7 @@ const PRDForm = () => {
                       selectedIds={developer}
                       onAdd={() => setDeveloper([...developer, Number(selectedPersonil.developer)])}
                       onRemove={(id) => setDeveloper(developer.filter(devId => devId !== id))}
+                      error={errors.developer}
                     />
 
                     <SelectWithTags
@@ -253,6 +274,7 @@ const PRDForm = () => {
                       selectedIds={stakeholder}
                       onAdd={() => setStakeholder([...stakeholder, Number(selectedPersonil.stakeholder)])}
                       onRemove={(id) => setStakeholder(stakeholder.filter(stakeId => stakeId !== id))}
+                      error={errors.stakeholder}
                     />
                   </div>
                 </div>
@@ -273,6 +295,7 @@ const PRDForm = () => {
                           ...darciRoles,
                           [role]: darciRoles[role].filter(personilId => personilId !== id)
                         })}
+                        error={errors[role]}
                       />
                     ))}
                   </div>
@@ -289,6 +312,7 @@ const PRDForm = () => {
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                       />
+                      {errors.startDate && <p className="text-red-500 text-sm">{errors.startDate}</p>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">End Date</label>
@@ -298,6 +322,7 @@ const PRDForm = () => {
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
                       />
+                      {errors.endDate && <p className="text-red-500 text-sm">{errors.endDate}</p>}
                     </div>
                   </div>
                 </div>

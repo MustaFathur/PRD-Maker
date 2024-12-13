@@ -1,49 +1,49 @@
-name: Deploy Frontend to Google App Engine
+# name: Deploy Frontend to Google App Engine
 
-on:
-  push:
-    paths:
-      - "Cloud_Computing/frontend/**"
-  workflow_dispatch:
+# on:
+#   push:
+#     paths:
+#       - "Cloud_Computing/frontend/**"
+#   workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '22'
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '22'
 
-      - name: Install Dependencies
-        run: |
-          cd Cloud_Computing/frontend
-          npm install
+#       - name: Install Dependencies
+#         run: |
+#           cd Cloud_Computing/frontend
+#           npm install
 
-      - name: Generate CSS
-        run: |
-          cd Cloud_Computing/frontend
-          npm run tailwind
+#       - name: Generate CSS
+#         run: |
+#           cd Cloud_Computing/frontend
+#           npm run tailwind
 
-      - name: Build Project
-        run: |
-          cd Cloud_Computing/frontend
-          npm run build
+#       - name: Build Project
+#         run: |
+#           cd Cloud_Computing/frontend
+#           npm run build
 
-      - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
+#       - name: Authenticate with Google Cloud
+#         uses: google-github-actions/auth@v1
+#         with:
+#           credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+#       - name: Set up Cloud SDK
+#         uses: google-github-actions/setup-gcloud@v1
+#         with:
+#           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Deploy to Google App Engine
-        run: |
-          gcloud app deploy Cloud_Computing/frontend/app.yaml --quiet
+#       - name: Deploy to Google App Engine
+#         run: |
+#           gcloud app deploy Cloud_Computing/frontend/app.yaml --quiet

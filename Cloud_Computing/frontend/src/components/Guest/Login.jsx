@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CiUser } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaGoogle } from "react-icons/fa";
+import api from '../../utils/api';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -15,20 +16,13 @@ const Login = () => {
         setError(null);
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-                credentials: 'include', // Include cookies in the request
-            });
+            const response = await api.post('/auth/login', { email, password });
 
             if (response.status !== 200) {
                 throw new Error('Login failed');
             }
 
-            const data = await response.json();
+            const data = response.data;
             if (data.redirectTo) {
                 navigate(data.redirectTo);
             } else {

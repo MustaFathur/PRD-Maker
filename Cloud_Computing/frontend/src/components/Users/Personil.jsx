@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../Layout/Sidebar';
 import Navbar from '../Layout/Navbar';
+import api from '../../utils/api';
 
 const Personil = () => {
   const [personil, setPersonil] = useState([]);
@@ -19,19 +20,13 @@ const Personil = () => {
   useEffect(() => {
     const fetchPersonil = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/personil', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies in the request
-        });
+        const response = await api.get('/personil', { withCredentials: true });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error('Failed to fetch personil data');
         }
 
-        const data = await response.json();
+        const data = response.data;
         setPersonil(data);
       } catch (error) {
         console.error('Error fetching personil data:', error);
@@ -44,20 +39,13 @@ const Personil = () => {
 
   const handleCreatePersonil = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/personil', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ personil_name: newPersonilName, role: newPersonilRole }),
-        credentials: 'include', // Include cookies in the request
-      });
+      const response = await api.post('/personil', { personil_name: newPersonilName, role: newPersonilRole }, { withCredentials: true });
 
-      if (!response.ok) {
+      if (response.status !== 201) {
         throw new Error('Failed to create personil');
       }
 
-      const newPersonil = await response.json();
+      const newPersonil = response.data;
       setPersonil([...personil, newPersonil]);
       setNewPersonilName('');
       setNewPersonilRole('');
@@ -72,20 +60,13 @@ const Personil = () => {
 
   const handleUpdatePersonil = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/personil/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ personil_name: editPersonilName, role: editPersonilRole }),
-        credentials: 'include', // Include cookies in the request
-      });
+      const response = await api.put(`/personil/${id}`, { personil_name: editPersonilName, role: editPersonilRole }, { withCredentials: true });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Failed to update personil');
       }
 
-      const updatedPersonil = await response.json();
+      const updatedPersonil = response.data;
       setPersonil(personil.map(p => (p.personil_id === id ? updatedPersonil : p)));
       setEditPersonilId(null);
       setEditPersonilName('');
@@ -100,12 +81,9 @@ const Personil = () => {
 
   const handleDeletePersonil = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/personil/${personilToDelete}`, {
-        method: 'DELETE',
-        credentials: 'include', // Include cookies in the request
-      });
+      const response = await api.delete(`/personil/${personilToDelete}`, { withCredentials: true });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Failed to delete personil');
       }
 

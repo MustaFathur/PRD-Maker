@@ -22,19 +22,13 @@ const PRDList = () => {
         const userQuery = filterUser === 'all' ? '' : `userFilter=${filterUser}`;
         const query = [stageQuery, userQuery].filter(Boolean).join('&');
 
-        const response = await fetch(`http://localhost:5000/api/prd?${query}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies in the request
-        });
+        const response = await api.get(`/prd?${query}`, { withCredentials: true });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error('Failed to fetch PRD list');
         }
 
-        const data = await response.json();
+        const data = response.data;
         setPrdList(data);
       } catch (error) {
         console.error('Error fetching PRD list:', error);

@@ -1,17 +1,15 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../../utils/api';
 
 const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include', // Include cookies in the request
-      });
+      const response = await api.post('/auth/logout', {}, { withCredentials: true });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Logout failed');
       }
 

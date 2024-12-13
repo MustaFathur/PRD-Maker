@@ -8,7 +8,7 @@ load_dotenv()
 
 
 class ModelType(Enum):
-    GPT4 = "gpt-4o-mini"
+    GPT4 = "gpt-4o"
     GEMINI = "gemini-pro"
 
 
